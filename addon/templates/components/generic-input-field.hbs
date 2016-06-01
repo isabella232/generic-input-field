@@ -1,4 +1,5 @@
-{{log sanitizedContent}}
 {{#each sanitizedContent as |item|}}
   <label>{{get item optionLabelPath}}</label>
+{{else}}
+  <label>loading</label>
 {{/each}}
