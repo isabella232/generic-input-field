@@ -15,22 +15,57 @@ export default Component.extend({
       const isPromise = content.constructor === Promise;
 
       if (isPromise) {
-        console.log('resolving promise');
-        content.then((x) => { sanitizedContent.addObjects(x) });
+        content.then((x) => { sanitizedContent.addObjects(x); });
       } else {
-        const asdf = Ember.ArrayProxy.create({ content });
 
-        console.log('not resolving promise');
-        console.log(asdf);
-        const isPromise = asdf.get('firstOjbect').constructor === Promise;
+        if (content.get) { // <- this check sucks
 
-        if (isPromise) {
-          Promise.all(asdf).then((resolvedContent) => {
-            sanitizedContent.addObjects(resolvedContent);
-          });
+          if (content.isLoaded) {
+
+            const isPromise = content.get('firstObject.constructor') === Promise;
+
+            if (isPromise) {
+              Promise.all(content).then((resolvedContent) => {
+                sanitizedContent.addObjects(resolvedContent);
+              });
+            } else {
+              sanitizedContent.addObjects(content);
+            }
+
+          } else {
+
+            content.then((arrayProxy) => {
+
+              const isPromise = arrayProxy.get('firstObject.constructor') === Promise;
+
+              if (isPromise) {
+                Promise.all(arrayProxy).then((resolvedContent) => {
+                  sanitizedContent.addObjects(resolvedContent);
+                });
+              } else {
+                sanitizedContent.addObjects(arrayProxy);
+              }
+
+            });
+
+          }
+
+
         } else {
-          sanitizedContent.addObjects(asdf);
+
+          console.log('not resolving promise');
+          const isPromise = content[0].constructor === Promise;
+
+          if (isPromise) {
+            Promise.all(content).then((resolvedContent) => {
+              sanitizedContent.addObjects(resolvedContent);
+            });
+          } else {
+            sanitizedContent.addObjects(content);
+          }
+
         }
+
       }
 
     });

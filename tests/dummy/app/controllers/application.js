@@ -3,6 +3,10 @@ const { Controller, RSVP: { Promise } } = Ember;
 
 export default Controller.extend({
 
+  promiseRecordArray: Ember.computed('', function() {
+    return this.store.findAll('category');
+  }),
+
   array: [
     {
       id: 'A',
