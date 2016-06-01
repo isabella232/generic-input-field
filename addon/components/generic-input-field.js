@@ -8,6 +8,7 @@ export default Component.extend({
   sanitizedContent: null,
   content: null, // <- mandatory and array
   selections: null, // <- mandatory and array
+  limit: 0,
 
   init() {
 
@@ -60,9 +61,18 @@ export default Component.extend({
 
   filteredContent: computed.setDiff('sanitizedContent', 'selections'),
 
+  limitReached: computed('limit', 'selections.length', function() {
+    const limit = this.get('limit');
+    const selectionLength = this.get('selections.length');
+    return limit === 0 || selectionLength < limit;
+  }),
+
   actions: {
     addToSelection(item) {
-      this.get('addSelection')(item);
+      const limitReached = this.get('limitReached');
+      if (limitReached) {
+        this.get('addSelection')(item);
+      }
     },
 
     removeFromSelection(item) {

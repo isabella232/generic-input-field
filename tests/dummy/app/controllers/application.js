@@ -15,7 +15,7 @@ export default Controller.extend({
     {
       id: 'A',
       label: 'Category A',
-      multi: false
+      limit: 1
     },
     {
       id: 'B',
@@ -72,7 +72,10 @@ export default Controller.extend({
   }),
 
   actions: {
-    addToArray(item) {
+    addToArray(item/*, parentNodes */) {
+      //item = samsung3
+      //parentNodes = [ '<=', 'samsung'];
+      //{ grandparent: samsung, parent: <=, item: samsung3 }
       this.get('selectionsForArray').pushObject(item);
     },
     removeFromArray(item) {

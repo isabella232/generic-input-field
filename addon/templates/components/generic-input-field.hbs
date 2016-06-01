@@ -1,5 +1,7 @@
 {{#each filteredContent as |item|}}
-  <label {{action 'addToSelection' item}}>{{get item optionLabelPath}}</label>
+  {{#if limitReached}}
+    <label {{action 'addToSelection' item}}>{{get item optionLabelPath}}</label>
+  {{/if}}
 {{else}}
   <label>no content yet</label>
 {{/each}}
