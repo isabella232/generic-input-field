@@ -1,5 +1,17 @@
-{{#each sanitizedContent as |item|}}
-  <label>{{get item optionLabelPath}}</label>
+{{#each filteredContent as |item|}}
+  <label {{action 'addToSelection' item}}>{{get item optionLabelPath}}</label>
 {{else}}
-  <label>loading</label>
+  <label>no content yet</label>
 {{/each}}
+
+<br>
+
+{{#each selections as |item|}}
+  <label {{action 'removeFromSelection' item}}>{{get item optionLabelPath}}</label>
+{{else}}
+  <label>no selections yet</label>
+{{/each}}
+
+<br>
+<br>
+<br>

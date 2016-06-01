@@ -1,12 +1,16 @@
 import Ember from 'ember';
-const { Controller, RSVP: { Promise } } = Ember;
+const { A, Controller, RSVP: { Promise } } = Ember;
 
 export default Controller.extend({
 
+  selectionsForModel: A(),
+
+  selectionsForPromiseRecordArray: A(),
   promiseRecordArray: Ember.computed('', function() {
     return this.store.findAll('category');
   }),
 
+  selectionsForArray: A(),
   array: [
     {
       id: 'A',
@@ -25,6 +29,7 @@ export default Controller.extend({
     },
   ],
 
+  selectionsForArrayOfPromises: A(),
   arrayOfPromises: [
     new Promise((res) => {
       setTimeout(() => {
@@ -43,6 +48,7 @@ export default Controller.extend({
     }),
   ],
 
+  selectionsForPromise: A(),
   promise: new Promise((resolve) => {
     const array = [
       {
@@ -63,6 +69,43 @@ export default Controller.extend({
     ];
 
     setTimeout(() => resolve(array), 1000);
-  })
+  }),
+
+  actions: {
+    addToArray(item) {
+      this.get('selectionsForArray').pushObject(item);
+    },
+    removeFromArray(item) {
+      this.get('selectionsForArray').removeObject(item);
+    },
+
+    addToPromise(item) {
+      this.get('selectionsForPromise').pushObject(item);
+    },
+    removeFromPromise(item) {
+      this.get('selectionsForPromise').removeObject(item);
+    },
+
+    addToArrayOfPromises(item) {
+      this.get('selectionsForArrayOfPromises').pushObject(item);
+    },
+    removeFromArrayOfPromises(item) {
+      this.get('selectionsForArrayOfPromises').removeObject(item);
+    },
+
+    addToModel(item) {
+      this.get('selectionsForModel').pushObject(item);
+    },
+    removeFromModel(item) {
+      this.get('selectionsForModel').removeObject(item);
+    },
+
+    addToPromiseRecordArray(item) {
+      this.get('selectionsForPromiseRecordArray').pushObject(item);
+    },
+    removeFromPromiseRecordArray(item) {
+      this.get('selectionsForPromiseRecordArray').removeObject(item);
+    },
+  }
 
 });
