@@ -1,6 +1,33 @@
 import Ember from 'ember';
 const { A, Controller, RSVP: { Promise } } = Ember;
 
+const catB = {
+  id: 'B',
+  label: 'Category B',
+  multi: false
+};
+
+const catA = {
+  id: 'A',
+  label: 'Category A',
+  children: [
+    {
+      id: 'sA1',
+      label: 'SubCategory from A 1',
+    },
+    {
+      id: 'sA2',
+      label: 'SubCategory from A 2',
+    },
+  ]
+};
+
+const catC = {
+  id: 'C',
+  label: 'Category C',
+  multi: false
+};
+
 export default Controller.extend({
 
   selectionsForModel: A(),
@@ -10,24 +37,9 @@ export default Controller.extend({
     return this.store.findAll('category');
   }),
 
-  selectionsForArray: A(),
-  array: [
-    {
-      id: 'A',
-      label: 'Category A',
-      limit: 1
-    },
-    {
-      id: 'B',
-      label: 'Category B',
-      multi: false
-    },
-    {
-      id: 'C',
-      label: 'Category C',
-      multi: false
-    },
-  ],
+  selectionsForArray: A([catA, catB]),
+
+  array: [ catA, catB, catC ],
 
   selectionsForArrayOfPromises: A(),
   arrayOfPromises: [
@@ -72,10 +84,7 @@ export default Controller.extend({
   }),
 
   actions: {
-    addToArray(item/*, parentNodes */) {
-      //item = samsung3
-      //parentNodes = [ '<=', 'samsung'];
-      //{ grandparent: samsung, parent: <=, item: samsung3 }
+    addToArray(item) {
       this.get('selectionsForArray').pushObject(item);
     },
     removeFromArray(item) {

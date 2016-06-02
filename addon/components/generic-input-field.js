@@ -5,6 +5,12 @@ const { A, Component, computed, run: { schedule }, RSVP: { Promise } } = Ember;
 export default Component.extend({
   layout,
 
+  optionValuePath: 'id',
+  optionLabelPath: 'label',
+  optionChildrenPath: 'children',
+
+  selectionsMap: null,
+
   sanitizedContent: null,
   content: null, // <- mandatory and array
   selections: null, // <- mandatory and array
@@ -13,10 +19,14 @@ export default Component.extend({
   init() {
 
     this.set('sanitizedContent', A());
+    this.set('selectionsMap', Ember.Object.create());
 
     schedule('afterRender', this, () => {
 
       const content = this.get('content');
+      if (!content) {
+        throw 'content must be set for generic-input-field';
+      }
       const sanitizedContent = this.get('sanitizedContent');
       const isPlainArray = typeof content.length === 'number';
       const isPlainPromiseArray = content[0] && content[0].constructor === Promise;
@@ -61,7 +71,7 @@ export default Component.extend({
 
   filteredContent: computed.setDiff('sanitizedContent', 'selections'),
 
-  limitReached: computed('limit', 'selections.length', function() {
+  withinLimit: computed('limit', 'selections.length', function() {
     const limit = this.get('limit');
     const selectionLength = this.get('selections.length');
     return limit === 0 || selectionLength < limit;
@@ -69,14 +79,26 @@ export default Component.extend({
 
   actions: {
     addToSelection(item) {
-      const limitReached = this.get('limitReached');
-      if (limitReached) {
+      const withinLimit = this.get('withinLimit');
+      const valuePath = this.get('optionValuePath');
+      if (withinLimit) {
         this.get('addSelection')(item);
+        this.get('selectionsMap').set(item[valuePath], A());
       }
+    },
+
+    addToChildSelection(parentValue, item) {
+      console.log('addToChildSelection',parentValue,item);
+      this.get('selectionsMap').get(parentValue).pushObject(item);
     },
 
     removeFromSelection(item) {
       this.get('removeSelection')(item);
+    },
+
+    removeFromChildSelection(parentValue, item) {
+      console.log('addToChildSelection',parentValue,item);
+      this.get('selectionsMap').get(parentValue).removeObject(item);
     }
   }
 

@@ -1,6 +1,7 @@
+{{log selections}}
 {{#each filteredContent as |item|}}
-  {{#if limitReached}}
-    <label {{action 'addToSelection' item}}>{{get item optionLabelPath}}</label>
+  {{#if withinLimit}}
+    <label {{action 'addToSelection' item}} style='background: red'>{{get item optionLabelPath}}</label>
   {{/if}}
 {{else}}
   <label>no content yet</label>
@@ -9,7 +10,14 @@
 <br>
 
 {{#each selections as |item|}}
-  <label {{action 'removeFromSelection' item}}>{{get item optionLabelPath}}</label>
+  <label {{action 'removeFromSelection' item}} style='background: green'>{{get item optionLabelPath}}</label>
+  {{#if (get item optionChildrenPath)}}
+    {{generic-input-field
+      content=item.children
+      selections=(get selectionsMap 'A')
+      addSelection=(action 'addToChildSelection' (get item optionValuePath))
+      removeSelection=(action 'removeFromChildSelection' (get item optionValuePath))}}
+  {{/if}}
 {{else}}
   <label>no selections yet</label>
 {{/each}}

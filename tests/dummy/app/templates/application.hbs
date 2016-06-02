@@ -1,61 +1,13 @@
 <h2 id="title">Welcome to Ember</h2>
 
+{{log selectionsForArray}}
 {{generic-input-field
   content=array
   selections=selectionsForArray
 
   removeSelection=(action 'removeFromArray')
   addSelection=(action 'addToArray')
-  optionLimitPath='limit'
+  optionChildrenPath='children'
   optionLabelPath='label'}}
 
 {{selectionsForArray.length}}
-<br>=============================<br>
-
-{{generic-input-field
-  content=promise
-  selections=selectionsForPromise
-
-  removeSelection=(action 'removeFromPromise')
-  addSelection=(action 'addToPromise')
-  optionLimitPath='limit'
-  optionLabelPath='label'}}
-
-{{selectionsForPromise.length}}
-<br>=============================<br>
-
-{{generic-input-field
-  content=arrayOfPromises
-  selections=selectionsForArrayOfPromises
-
-  removeSelection=(action 'removeFromArrayOfPromises')
-  addSelection=(action 'addToArrayOfPromises')
-  optionLimitPath='limit'
-  optionLabelPath='label'}}
-
-{{selectionsForArrayOfPromises.length}}
-<br>=============================<br>
-
-{{generic-input-field
-  content=model
-  selections=selectionsForModel
-
-  removeSelection=(action 'removeFromModel')
-  addSelection=(action 'addToModel')
-  optionLimitPath='limit'
-  optionLabelPath='label'}}
-
-{{selectionsForModel.length}}
-<br>=============================<br>
-
-{{generic-input-field
-  content=promiseRecordArray
-  selections=selectionsForPromiseRecordArray
-
-  removeSelection=(action 'removeFromPromiseRecordArray')
-  addSelection=(action 'addToPromiseRecordArray')
-  optionLimitPath='limit'
-  optionLabelPath='label'}}
-
-{{selectionsForPromiseRecordArray.length}}
-<br>=============================<br>
