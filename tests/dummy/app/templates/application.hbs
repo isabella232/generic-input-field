@@ -1,13 +1,3 @@
-<h2 id="title">Welcome to Ember</h2>
-
-{{log selectionsForArray}}
-{{generic-input-field
-  content=array
-  selections=selectionsForArray
-
-  removeSelection=(action 'removeFromArray')
-  addSelection=(action 'addToArray')
-  optionChildrenPath='children'
-  optionLabelPath='label'}}
-
-{{selectionsForArray.length}}
+{{link-to 'index' 'index'}}|{{link-to 'resolver' 'resolver'}}
+<hr/>
+{{outlet}}

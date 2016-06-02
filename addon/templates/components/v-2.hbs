@@ -1,0 +1,25 @@
+:{{position}}:<br>
+{{#each filteredContent as |item|}}
+  {{#if withinLimit}}
+    <label {{action 'addToSelection' item}} style='background: red'>{{get item optionLabelPath}}</label>
+  {{/if}}
+{{else}}
+  <label>no content yet</label>
+{{/each}}
+
+<br>
+
+{{#unless loadedYet}}
+  {{yield (action 'loadContent') loadedYet}}
+{{/unless}}
+
+{{#each selections as |item|}}
+  <label {{action 'removeFromSelection' item}} style='background: green'>{{get item optionLabelPath}}</label>
+    {{#if loadedYet}}
+      {{yield (action 'loadContent') loadedYet}}
+    {{/if}}
+{{else}}
+  <label>no selections yet</label>
+{{/each}}
+
+<br>

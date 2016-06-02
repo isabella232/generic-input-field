@@ -1,0 +1,10 @@
+{{generic-input-field
+  content=array
+  selections=selectionsForArray
+
+  removeSelection=(action 'removeFromArray')
+  addSelection=(action 'addToArray')
+  optionChildrenPath='children'
+  optionLabelPath='label'}}
+
+{{selectionsForArray.length}}
