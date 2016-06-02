@@ -1,4 +1,3 @@
-{{log selections}}
 {{#each filteredContent as |item|}}
   {{#if withinLimit}}
     <label {{action 'addToSelection' item}} style='background: red'>{{get item optionLabelPath}}</label>
@@ -22,6 +21,4 @@
   <label>no selections yet</label>
 {{/each}}
 
-<br>
-<br>
 <br>

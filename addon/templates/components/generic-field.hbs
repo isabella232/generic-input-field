@@ -1,0 +1,28 @@
+<span style='background: rgba(255, 165, 0, 0.5)'>
+  {{#each filteredContent as |item|}}
+    <label {{action 'addToSelection' item}}>
+      {{get item optionLabelPath}}
+    </label>
+  {{else}}
+    <label>[]</label>
+  {{/each}}
+</span>
+
+<br>
+
+<span style='background: rgba(50, 205, 50, 0.5)'>
+  {{#each selections as |s|}}
+    <label {{action 'removeFromSelection' s.item}}>
+      {{get s.item optionLabelPath}}
+    </label>
+    {{generic-field
+      content=s.content
+      tree=s.tree
+      parent=s.item
+      addSelection=(action 'addSelection')
+      removeSelection=(action 'removeSelection')}}
+
+  {{else}}
+    <label>[]</label>
+  {{/each}}
+</span>

@@ -1,3 +1,6 @@
-{{link-to 'index' 'index'}}|{{link-to 'resolver' 'resolver'}}
-<hr/>
-{{outlet}}
+{{generic-field
+  content=myContent
+  tree=myTree
+
+  addSelection=(action 'addSelection')
+  removeSelection=(action 'removeSelection')}}

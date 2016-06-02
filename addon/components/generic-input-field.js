@@ -18,6 +18,14 @@ export default Component.extend({
 
   init() {
 
+    const selected = this.get('selected');
+    const parents = A(selected.mapBy('parent')).uniq();
+    const grandparents = A(parents.mapBy('parent')).uniq();
+    console.log(selected);
+    console.log(parents);
+    console.log(grandparents);
+
+
     this.set('sanitizedContent', A());
     this.set('selectionsMap', Ember.Object.create());
 

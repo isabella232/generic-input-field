@@ -28,8 +28,64 @@ const catC = {
   multi: false
 };
 
+/*
+ * [0, A, A1, A2, B, B1, B2, ..., ]
+ *
+ * categories: [A1, B1, B2]
+ *
+ * {{component
+ *   content=allRootCategoriesFromStore
+ *   selections = model.categories
+ *   }}
+ *
+ *   findParent(s) {
+ *     go through content, and find x where
+ *     x.children contains s
+ *   }
+ *
+ *   init() {
+ *     for selections as |s| do
+ *      findParent(s) // := [A, B]
+ *      tmpArray.push s
+ *
+ *     end
+ *   }
+ *
+ */
+
+const categories = [
+  { id: 'A', label: 'category a' },
+  { id: 'B', label: 'category a' },
+  { id: 'C', label: 'category a' },
+];
+
+const catAA = { id: 'AA', label: 'category a a' };
+const catAB = { id: 'AB', label: 'category a b' };
+const catAC = { id: 'AC', label: 'category a c' };
+const catBA = { id: 'BA', label: 'category b a' };
+const catBB = { id: 'BB', label: 'category b b' };
+
+categories[0].children = [ catAA, catAB, catAC ];
+categories[1].children = [ catBA, catBB ];
+categories[2].children = [];
+
+catAA.parent = categories[0];
+catAB.parent = categories[0];
+catAC.parent = categories[0];
+
+catBA.parent = categories[1];
+catBB.parent = categories[1];
+
 export default Controller.extend({
 
+  selections: A(),
+  selected: A([catAA, catAB, catBB]),
+  allCategories: categories,
+
+
+
+
+  // ---------------------------------
   selectionsForModel: A(),
 
   selectionsForPromiseRecordArray: A(),
@@ -38,6 +94,8 @@ export default Controller.extend({
   }),
 
   selectionsForArray: A([catA, catB]),
+
+  selectionsB: A([catA, catB]),
 
   array: [ catA, catB, catC ],
 
@@ -117,6 +175,36 @@ export default Controller.extend({
     },
     removeFromPromiseRecordArray(item) {
       this.get('selectionsForPromiseRecordArray').removeObject(item);
+    },
+
+
+    //--------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    addSelection(item) {
+    },
+    removeSelection(item) {
     },
   }
 
