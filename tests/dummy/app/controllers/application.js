@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import assign from 'npm:deep-assign';
 const { A, Controller } = Ember;
 
 const c2 = { id: 2, label: 'a1', children: [] };
@@ -11,37 +10,17 @@ const c4 = { id: 4, label: 'B',  children: [c5] };
 const c6 = { id: 6, label: 'C',  children: [] };
 const c7 = { id: 7, label: 'D',  children: [] };
 
+c2.parent = c1;
+c3.parent = c1;
+c5.parent = c1;
+
+
 export default Controller.extend({
 
   myContent: A([c1, c4, c6, c7]),
-
-  myTree: {
-    1: { 2: {}, 3: {} },
-    4: {},
-  },
-
-  actions: {
-
-    addSelection(hash) {
-      const myTree = this.get('myTree');
-      this.set('myTree', assign({}, myTree, hash));
-    },
-
-    removeSelection(array) {
-      const myTree = this.get('myTree');
-
-      let object = myTree;
-      while (array.length) {
-        const id = array.shift();
-        if (array.length) {
-          object = object[id];
-        } else {
-          delete object[id];
-        }
-      }
-
-      this.set('myTree', assign({}, myTree));
-    }
+  myInput: [c2, c3, c5, c7],
+  myCallback: function() {
+    return [c1,c2,c3,c4,c5,c6,c7];
   }
 
 });
