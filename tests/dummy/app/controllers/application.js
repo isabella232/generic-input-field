@@ -23,9 +23,11 @@ export default Controller.extend({
     addMySelection(item) {
       this.get('myInput').addObject(item);
     },
+
     removeMySelection(item) {
       this.get('myInput').removeObject(item);
-    },
+      this.get('myInput').removeObjects(item.children);
+    }
   }
 
 });
