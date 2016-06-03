@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import assign from '../utils/deep-assign';
 import layout from '../templates/components/root-component';
+const { A } = Ember;
 
 export default Ember.Component.extend({
   layout,
@@ -54,9 +55,24 @@ export default Ember.Component.extend({
 
     removeSelection(array) {
       const all = this.get('all');
+      const input = this.get('input');
       const removeSelection = this.get('removeSelection');
-      const id = array[array.length - 1];
+      const addSelection = this.get('addSelection');
+      const id = array.pop();
       const item = all.find((item) => item.id === id);
+
+      const parentId = array.pop();
+      const parent = all.find((item) => item.id === parentId);
+      if (parent) {
+
+        const siblings = A(parent.children).filter((child) => {
+          return input.indexOf(child) !== -1;
+        });
+
+        if (siblings.length === 1) {
+          addSelection(parent);
+        }
+      }
 
       removeSelection(item);
     }
