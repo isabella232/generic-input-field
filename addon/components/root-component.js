@@ -11,7 +11,7 @@ export default Ember.Component.extend({
     return callback();
   }),
 
-  myTree: Ember.computed('input', 'callback', function() {
+  myTree: Ember.computed('input.[]', 'callback', function() {
     const items = this.get('input');
     const all = this.get('all');
     const findParent = (item) => all.find(parent => parent.children.indexOf(item) !== -1);
@@ -39,9 +39,8 @@ export default Ember.Component.extend({
   actions: {
 
     addSelection(hash) {
-      const myTree = this.get('myTree');
       const all = this.get('all');
-      this.set('myTree', assign({}, myTree, hash));
+      const addSelection = this.get('addSelection');
       let rec = (hash, key) => {
         const newHash = hash[key];
         const newKey = Object.keys(newHash)[0];
@@ -50,27 +49,16 @@ export default Ember.Component.extend({
       const id = rec(hash, +Object.keys(hash)[0]);
       const item = all.find((item) => item.id === id);
 
-      console.log(item); //bubble out later
+      addSelection(item);
     },
 
     removeSelection(array) {
-      const myTree = this.get('myTree');
       const all = this.get('all');
+      const removeSelection = this.get('removeSelection');
+      const id = array[array.length - 1];
+      const item = all.find((item) => item.id === id);
 
-      let object = myTree;
-      while (array.length) {
-        const id = array.shift();
-        if (array.length) {
-          object = object[id];
-        } else {
-          delete object[id];
-          const item = all.find((item) => item.id === id);
-          console.log(item);
-        }
-      }
-
-      this.set('myTree', assign({}, myTree));
-
+      removeSelection(item);
     }
   }
 

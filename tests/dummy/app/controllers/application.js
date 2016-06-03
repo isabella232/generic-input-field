@@ -10,17 +10,23 @@ const c4 = { id: 4, label: 'B',  children: [c5] };
 const c6 = { id: 6, label: 'C',  children: [] };
 const c7 = { id: 7, label: 'D',  children: [] };
 
-c2.parent = c1;
-c3.parent = c1;
-c5.parent = c1;
+c2.parent = c1; c3.parent = c1; c5.parent = c1;
 
 
 export default Controller.extend({
 
   myContent: A([c1, c4, c6, c7]),
-  myInput: [c2, c3, c5, c7],
-  myCallback: function() {
-    return [c1,c2,c3,c4,c5,c6,c7];
+  //myInput: A([c2, c3, c5, c7]),
+  myInput: A([]),
+  myCallback: () => A([c1,c2,c3,c4,c5,c6,c7]),
+
+  actions: {
+    addMySelection(item) {
+      this.get('myInput').addObject(item);
+    },
+    removeMySelection(item) {
+      this.get('myInput').removeObject(item);
+    },
   }
 
 });
