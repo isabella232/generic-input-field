@@ -1,21 +1,21 @@
 import Ember from 'ember';
 import assign from '../utils/deep-assign';
 import layout from '../templates/components/root-component';
-const { A } = Ember;
+const { A, Component, computed } = Ember;
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   tagName: '',
 
-  all: Ember.computed('callback', function() {
+  all: computed('callback', function() {
     const callback = this.get('callback');
     return callback();
   }),
 
-  myTree: Ember.computed('input.[]', 'callback', function() {
+  myTree: computed('input.[]', 'callback', function() {
     const items = this.get('input');
     const all = this.get('all');
-    const findParent = (item) => all.find(parent => parent.children.indexOf(item) !== -1);
+    const findParent = (item) => all.find(({ children }) => children.indexOf(item) !== -1);
 
     const rec = (hash, parent) => {
       const nextParent = findParent(parent);

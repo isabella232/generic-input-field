@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import layout from '../templates/components/generic-field';
-const { computed, A } = Ember;
+const { A, Component, computed } = Ember;
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   tagName: 'span',
   classNames: ['generic-field'],
@@ -20,7 +20,7 @@ export default Ember.Component.extend({
       return [];
     }
 
-    return content.filter((item) => selectedIds.indexOf(item.id) === -1);
+    return content.filter(({ id }) => selectedIds.indexOf(id) === -1);
   }),
 
   selections: computed('tree', function() {
