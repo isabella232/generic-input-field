@@ -33,11 +33,13 @@ export default Component.extend({
     const content = this.get('content');
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
+    const optionLimitPath = this.get('optionLimitPath');
     let selections = Object.keys(tree);
     selections = selections.map((id) => content.findBy(optionValuePath, +id));
     selections = selections.map((item) => {
       return {
         item,
+        limit: get(item, optionLimitPath),
         content: A(get(item, optionChildrenPath)),
         tree: tree[get(item, optionValuePath)]
       };

@@ -8,6 +8,7 @@ const get = (object, key) => object.get ? object.get(key) : object[key];
 export default Component.extend({
   layout,
   tagName: '',
+  optionLimitPath: 'limit',
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
