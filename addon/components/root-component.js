@@ -3,6 +3,8 @@ import assign from '../utils/deep-assign';
 import layout from '../templates/components/root-component';
 const { A, Component, computed } = Ember;
 
+const get = (object, key) => object.get ? object.get(key) : object[key];
+
 export default Component.extend({
   layout,
   tagName: '',
@@ -19,7 +21,11 @@ export default Component.extend({
   myTree: computed('input.[]', 'callback', function() {
     const items = this.get('input');
     const all = this.get('all');
-    const findParent = (item) => all.find(({ children }) => children.indexOf(item) !== -1);
+    const optionChildrenPath = this.get('optionChildrenPath');
+    const optionValuePath = this.get('optionValuePath');
+    const findParent = (item) => all.find((parent) => {
+      return get(parent, optionChildrenPath).indexOf(item) !== -1;
+    });
 
     const rec = (hash, parent) => {
       const nextParent = findParent(parent);
@@ -29,14 +35,14 @@ export default Component.extend({
       }
 
       if (nextParent) {
-        return rec({ [parent.id]: hash }, nextParent);
+        return rec({ [get(parent, optionValuePath)]: hash }, nextParent);
       } else {
-        return { [parent.id]: hash };
+        return { [get(parent, optionValuePath)]: hash };
       }
 
     };
 
-    const paths = items.map(item => rec({ [item.id]: {} }, findParent(item)));
+    const paths = items.map(item => rec({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
     return assign({}, ...paths);
   }),
@@ -46,13 +52,14 @@ export default Component.extend({
     addSelection(hash) {
       const all = this.get('all');
       const addSelection = this.get('addSelection');
+      const optionValuePath = this.get('optionValuePath');
       let rec = (hash, key) => {
         const newHash = hash[key];
         const newKey = Object.keys(newHash)[0];
         return newKey ? rec(newHash, +newKey) : key;
       };
       const id = rec(hash, +Object.keys(hash)[0]);
-      const item = all.find((item) => item.id === id);
+      const item = all.find((item) => get(item, optionValuePath) === id);
 
       addSelection(item);
     },
@@ -62,14 +69,16 @@ export default Component.extend({
       const input = this.get('input');
       const removeSelection = this.get('removeSelection');
       const addSelection = this.get('addSelection');
+      const optionChildrenPath = this.get('optionChildrenPath');
+      const optionValuePath = this.get('optionValuePath');
       const id = array.pop();
-      const item = all.find((item) => item.id === id);
+      const item = all.find((item) => get(item, optionValuePath) === id);
 
       const parentId = array.pop();
-      const parent = all.find((item) => item.id === parentId);
+      const parent = all.find((item) => get(item, optionValuePath) === parentId);
       if (parent) {
 
-        const siblings = A(parent.children).filter((child) => {
+        const siblings = A(get(parent, optionChildrenPath)).filter((child) => {
           return input.indexOf(child) !== -1;
         });
 
