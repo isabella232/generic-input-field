@@ -1,4 +1,7 @@
-:{{position}}:<br>
+{{filteredContent.length}}
+{{content.length}}
+{{selections.length}}
+
 {{#each filteredContent as |item|}}
   {{#if withinLimit}}
     <label {{action 'addToSelection' item}} style='background: red'>{{get item optionLabelPath}}</label>
@@ -9,22 +12,9 @@
 
 <br>
 
-{{#unless loadedYet}}
-  {{yield (action 'loadContent') loadedYet}}
-{{else}}
-  loaded now
-{{/unless}}
-
 {{#each selections as |item|}}
   <label {{action 'removeFromSelection' item}} style='background: green'>{{get item optionLabelPath}}</label>
-    {{#if loadedYet}}
-      :{{position}}:{{yield (action 'loadContent') loadedYet}}
-    {{/if}}
-    {{#if renderedChildren}}
-      {{#each children as |child|}}
-        {{yield (action 'loadContent') loadedYet child}}
-      {{/each}}
-    {{/if}}
+    {{v-3 }}
 {{else}}
   <label>no selections yet</label>
 {{/each}}

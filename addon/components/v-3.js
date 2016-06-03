@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/v-2';
+import layout from '../templates/components/v-3';
 const { A, Component, computed, run: { schedule }, RSVP: { Promise } } = Ember;
 
 export default Component.extend({
@@ -15,71 +15,22 @@ export default Component.extend({
   limit: 0,
 
   init() {
-
     this.set('sanitizedContent', A());
-
-    // todo remove this later
     this.set('selections', A());
-
     this.set('loadedYet',false);
     this.set('renderedChildren',false);
-
     schedule('afterRender', this, () => {
-
-      const content = this.get('content');
-      if (!content) {
-        throw 'content must be set for generic-input-field';
-      }
-      const sanitizedContent = this.get('sanitizedContent');
-      const isPlainArray = typeof content.length === 'number';
-      const isPlainPromiseArray = content[0] && content[0].constructor === Promise;
-      const isPromise = content.constructor === Promise;
-      const pushItems = (content) => {
-        const isPromise = content.get('firstObject.constructor') === Promise;
-        if (isPromise) {
-          Promise.all(content).then((rc) => sanitizedContent.addObjects(rc));
-        } else {
-          sanitizedContent.addObjects(content);
-        }
-      };
-
-      if (isPlainArray && !isPlainPromiseArray){
-        console.log('graph-pos:',this.get('position'),' if (isPlainArray && !isPlainPromiseArray)')
-        this.set('loadedYet',content.length !== 0);
-        sanitizedContent.addObjects(content);
-        return;
-      }
-
-      if (isPlainArray && isPlainPromiseArray){
-        console.log('graph-pos:',this.get('position'),' if (isPlainArray && isPlainPromiseArray)')
-        this.set('loadedYet',true);
-        Promise.all(content).then((rc) => {
-          console.log('graph-pos:',this.get('position'),rc)
-          sanitizedContent.addObjects(rc)
-          if(!this.get('parentLoaded')){
-            const graphData = this.get('graph')[this.get('position')]
-            this.get('loadParent')(graphData)
-          }
-        });
-        return;
-      }
-
-      if (isPromise){
-        content.then((x) => { sanitizedContent.addObjects(x); });
-        return;
-      }
-
-      if (!isPromise && content.isLoaded) {
-        pushItems(content);
-        return;
-      }
-
-      if (!isPromise && !content.isLoaded) {
-        content.then(pushItems);
-        return;
+      if(this.get('lazyNested')){
+        Promise.all(this.get('lazyNested')).then(nest => {
+          console.log('lazyNested resolved:',nest);
+          const selections = nest[0];
+          const content = nest[1];
+          console.log('lazyNested resolved:',selections,content);
+          this.get('sanitizedContent').addObjects(content);
+          this.get('selections').addObjects(selections);
+        })
       }
     });
-
     this._super();
   },
 
@@ -91,7 +42,7 @@ export default Component.extend({
     return limit === 0 || selectionLength < limit;
   }),
 
-  reRenderChildren(){
+  renderChildren(){
     console.log('graph-pos:',this.get('position'),'reRenderingChildren');
     const graphData = this.get('graph')[this.get('position')];
     this.get('getAll')(graphData).then(r => {
@@ -99,6 +50,10 @@ export default Component.extend({
       console.log('graph-pos:',this.get('position'),'reRenderedChildren');
       this.set('renderedChildren', true)
     })
+  },
+
+  renderParent(){
+
   },
 
   actions: {

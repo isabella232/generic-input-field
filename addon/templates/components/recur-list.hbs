@@ -1,0 +1,8 @@
+<ul>
+  {{#each items as |item|}}
+    <li>{{get item optionLabelPath}}</li>
+    {{recur-list items=item.children}}
+  {{else}}
+    none
+  {{/each}}
+</ul>

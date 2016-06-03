@@ -1,0 +1,21 @@
+{{!-- {{#if renderingFromLeaves}}
+  {{#unless rendering}}
+    {{recur-input items=parents startAt='root' options=options}}
+  {{else}}
+    still loading...
+  {{/unless}}
+{{/if}}
+
+{{#if renderingFromRoot}}
+  {{#unless rendering}}
+    {{#each items as |item|}}
+      {{recur-input test='tesst' item=item items=item.children startAt='root' options=options}}
+    {{/each}}
+  {{else}}
+    still loading...
+  {{/unless}}
+{{/if}} --}}
+
+{{!-- {{#if allLoaded}}
+  {{recur-input items=completeTree startAt='root' options=options}}
+{{/if}} --}}

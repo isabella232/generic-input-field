@@ -1,0 +1,26 @@
+{{#each filteredContent as |item|}}
+  <label style='background: red'>{{get item optionLabelPath}}</label>
+{{else}}
+  <label>no content yet</label>
+{{/each}}
+
+<br>
+
+{{#each selections as |selection|}}
+  <label style='background: green'>{{get selection optionLabelPath}}</label>
+  {{#if (get selection optionChildrenPath)}}
+    {{recur-input branchRef=selection}}
+  {{/if}}
+{{else}}
+  <label>no selections yet</label>
+{{/each}}
+
+{{!-- {{recur-list items=completeTree}}
+
+{{completeTree.length}}
+
+<ul>
+  {{#each loadedItems as |testItem|}}
+    <li>{{get testItem optionLabelPath}}</li>
+  {{/each}}
+</ul> --}}

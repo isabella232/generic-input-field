@@ -1,0 +1,27 @@
+{{#v-2
+  content=categories
+  selections=categories
+  graph=graph
+  position='category'
+  getAll=(action 'loadChildren')
+  loadMore=(action 'loadDependantData') as |loadCats categoriesLoaded|}}
+
+  {{#v-2
+    content=subCategories
+    graph=graph
+    position='subcategory'
+    parentLoaded=categoriesLoaded
+    loadParent=(action loadCats)
+    getAll=(action 'loadChildren')
+    loadMore=(action 'loadDependantData') as |loadSubs subCategoriesLoaded|}}
+
+    {{#v-2
+      content=subSubsAsPromises graph=graph position='subsubcategory'
+      parentLoaded=subCategoriesLoaded loadParent=(action loadSubs)
+    }}
+      test
+    {{/v-2}}
+
+  {{/v-2}}
+
+{{/v-2}}
