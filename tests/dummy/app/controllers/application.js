@@ -16,8 +16,7 @@ c2.parent = c1; c3.parent = c1; c5.parent = c1;
 export default Controller.extend({
 
   myContent: A([c1, c4, c6, c7]),
-  //myInput: A([c2, c3, c5, c7]),
-  myInput: A([]),
+  myInput: A([c2, c3, c5, c7]),
   myCallback: () => A([c1,c2,c3,c4,c5,c6,c7]),
 
   actions: {
