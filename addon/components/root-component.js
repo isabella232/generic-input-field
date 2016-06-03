@@ -6,6 +6,10 @@ const { A, Component, computed } = Ember;
 export default Component.extend({
   layout,
   tagName: '',
+  optionChildrenPath: 'children',
+  optionLabelPath: 'label',
+  optionValuePath: 'id',
+  limit: 0,
 
   all: computed('callback', function() {
     const callback = this.get('callback');
