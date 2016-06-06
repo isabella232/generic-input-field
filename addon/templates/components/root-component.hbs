@@ -1,9 +1,9 @@
-{{#resolve-content content=content as |resolvedContent|}}
+{{#resolve-content content=all as |resolvedAll|}}
 
-  {{resolvedContent.length}}
-  {{#if resolvedContent.length}}
+  {{resolvedAll.length}}
+  {{#if resolvedAll.length}}
     {{generic-field
-      content=resolvedContent
+      content=(get-parents resolvedAll)
       tree=myTree
 
       limit=limit

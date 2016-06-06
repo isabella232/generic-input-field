@@ -8,7 +8,15 @@ export default Component.extend({
   content: null, // <- mandatory and array
 
   init() {
+    this.sanitize();
+    this._super();
+  },
 
+  contentChanged: Ember.observer('content.[]', function() {
+    this.sanitize();
+  }),
+
+  sanitize() {
     this.set('sanitizedContent', A());
     schedule('afterRender', this, () => {
 
@@ -56,7 +64,7 @@ export default Component.extend({
       }
     });
 
-    this._super();
   }
+
 
 });

@@ -14,12 +14,7 @@ export default Component.extend({
   optionValuePath: 'id',
   limit: 0,
 
-  all: computed('callback', function() {
-    const callback = this.get('callback');
-    return callback();
-  }),
-
-  myTree: computed('input.[]', 'callback', function() {
+  myTree: computed('input.[]', 'all.[]', function() {
     const items = this.get('input');
     const all = this.get('all');
     const optionChildrenPath = this.get('optionChildrenPath');

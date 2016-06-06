@@ -4,7 +4,7 @@ const { A, Component, computed } = Ember;
 
 const get = (object, key) => {
   return object.get ? object.get(key) : object[key];
-}
+};
 
 export default Component.extend({
   layout,

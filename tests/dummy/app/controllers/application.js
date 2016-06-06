@@ -10,19 +10,29 @@ const c4 = { id: 4, label: 'B',  children: [c5] };
 const c6 = { id: 6, label: 'C',  children: [] };
 const c7 = { id: 7, label: 'D',  children: [] };
 
+const c8 = { id: 8, label: 'd1', children: [] };
+
 c2.parent = c1; c3.parent = c1; c5.parent = c1;
 
+c7.loadMore = () => {
+  c7.children.push(c8);
+  return [c8];
+};
 
 export default Controller.extend({
 
-  myContent: A([c1, c6, c7]),
-  myInput: A([c2, c3, c7]),
-  myCallback: () => A([c1,c2,c3,c6,c7]),
+  myInput: A(),
+  myAll: A([c1,c2,c3,c6,c7]),
 
   actions: {
     loadMore(item) {
-      console.log('load more of', item);
-      //this.get('myInput').addObject(item);
+
+      if (item && item.loadMore) {
+        const more = item.loadMore();
+        this.get('myAll').addObjects(more);
+      } else {
+        this.get('myAll').addObjects([c4, c5]);
+      }
     },
 
     addMySelection(item) {
