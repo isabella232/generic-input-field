@@ -2,6 +2,7 @@ import Ember from 'ember';
 const { A } = Ember;
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
+const Promise = window.Promise;
 
 moduleForComponent('resolve-content', 'Integration | Component | resolve content', {
   integration: true
@@ -107,10 +108,10 @@ test('it resolves with array proxies', function(assert) {
 
   const items = ['item', 'item', 'item'];
   const mapped = items.map((item,index)=>{
-    return {id:index,label:item}
-  })
+    return {id:index,label:item};
+  });
   const arrayProxy = Ember.ArrayProxy.create({ content: mapped });
-  console.log(arrayProxy)
+  console.log(arrayProxy);
 
   this.set('arrayProxy', arrayProxy);
 
