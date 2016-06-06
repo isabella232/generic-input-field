@@ -1,12 +1,24 @@
-{{generic-field
-  content=content
-  tree=myTree
+{{#resolve-content content=content as |resolvedContent|}}
 
-  limit=limit
-  optionLabelPath=optionLabelPath
-  optionValuePath=optionValuePath
-  optionChildrenPath=optionChildrenPath
-  optionLimitPath=optionLimitPath
+  {{log resolvedContent}}
 
-  addSelection=(action 'addSelection')
-  removeSelection=(action 'removeSelection')}}
+  {{resolvedContent.length}}
+  {{#each resolvedContent as |item|}}
+    {{item.label}}
+  {{/each}}
+
+
+  {{generic-field
+    content=resolvedContent
+    tree=myTree
+
+    limit=limit
+    optionLabelPath=optionLabelPath
+    optionValuePath=optionValuePath
+    optionChildrenPath=optionChildrenPath
+    optionLimitPath=optionLimitPath
+
+    addSelection=(action 'addSelection')
+    removeSelection=(action 'removeSelection')}}
+
+{{/resolve-content}}

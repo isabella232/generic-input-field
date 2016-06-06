@@ -2,7 +2,10 @@ import Ember from 'ember';
 import layout from '../templates/components/generic-field';
 const { A, Component, computed } = Ember;
 
-const get = (object, key) => object.get ? object.get(key) : object[key];
+const get = (object, key) => {
+  console.log(object, key)
+  return object.get ? object.get(key) : object[key];
+}
 
 export default Component.extend({
   layout,
@@ -35,7 +38,13 @@ export default Component.extend({
     const optionValuePath = this.get('optionValuePath');
     const optionLimitPath = this.get('optionLimitPath');
     let selections = Object.keys(tree);
+    console.log('--sel,cont--');
+    console.log(selections,content)
+    console.log('--sel--');
     selections = selections.map((id) => content.findBy(optionValuePath, +id));
+    console.log('--sel--');
+    console.log(selections)
+    console.log('--sel--');
     selections = selections.map((item) => {
       return {
         item,
