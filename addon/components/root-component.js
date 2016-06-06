@@ -40,7 +40,29 @@ export default Component.extend({
 
     const paths = items.map(item => rec({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
-    return assign({}, ...paths);
+    const tree = assign({}, ...paths);
+
+    const rec2 = (hash) => {
+      const keys = Object.keys(hash);
+
+      const expandedKeys = keys.filter((key) => get(all.findBy('id', +key), 'expand'));
+      const collapsedKeys = keys.filter((key) => !get(all.findBy('id', +key), 'expand'));
+
+      expandedKeys.forEach((key) => rec2(hash[key]));
+
+      if (collapsedKeys.length >= 3) {
+        hash.collapsed = {};
+        collapsedKeys.forEach((key) => {
+          hash.collapsed[key] = hash[key];
+          delete hash[key];
+        });
+      } else {
+        collapsedKeys.forEach((key) => rec2(hash[key]));
+      }
+    };
+
+    rec2(tree);
+    return tree;
   }),
 
   actions: {
@@ -58,6 +80,18 @@ export default Component.extend({
       const item = all.find((item) => get(item, optionValuePath) === id);
 
       addSelection(item);
+    },
+
+    removeTreeSelection(array) {
+      const all = this.get('all');
+      const optionValuePath = this.get('optionValuePath');
+      const removeSelection = this.get('removeSelection');
+
+      const items = array.map((id) => {
+        return all.find((item) => get(item, optionValuePath) === +id);
+      });
+
+      items.forEach(removeSelection);
     },
 
     removeSelection(array) {

@@ -13,17 +13,24 @@
 
 <span style='background: rgba(50, 205, 50, 0.5)'>
   {{#each selections as |s|}}
-    <label {{action 'removeFromSelection' s.item}}>
-      {{get s.item optionLabelPath}}
-    </label>
-    {{generic-field
-      content=s.content
-      tree=s.tree
-      parent=s.item
-      limit=s.limit
-      loadMore=(action loadMore)
-      addSelection=(action 'addSelection')
-      removeSelection=(action 'removeSelection')}}
+    {{#if s.collapsed}}
+      <label {{action 'removeTreeFromSelection' s.tree}}>
+        {{s.count}} collapsed items
+      </label>
+    {{else}}
+      <label {{action 'removeFromSelection' s.item}}>
+        {{get s.item optionLabelPath}}
+      </label>
+      {{generic-field
+        content=s.content
+        tree=s.tree
+        parent=s.item
+        limit=s.limit
+        loadMore=(action loadMore)
+        addSelection=(action 'addSelection')
+        removeTreeSelection=(action removeTreeSelection)
+        removeSelection=(action 'removeSelection')}}
+    {{/if}}
 
   {{else}}
     <label>[]</label>

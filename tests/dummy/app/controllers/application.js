@@ -5,10 +5,10 @@ const c2 = { id: 2, label: 'a1', children: [] };
 const c3 = { id: 3, label: 'a2', children: [] };
 const c5 = { id: 5, label: 'b1', children: [] };
 
-const c1 = { id: 1, label: 'A',  children: [c2, c3] };
 const c4 = { id: 4, label: 'B',  children: [c5] };
 const c6 = { id: 6, label: 'C',  children: [] };
-const c7 = { id: 7, label: 'D',  children: [] };
+const c7 = { id: 7, label: 'D',  children: [], expand: true };
+const c1 = { id: 1, label: 'A',  children: [c2, c3, c6, c7] };
 
 const c8 = { id: 8, label: 'd1', children: [] };
 
@@ -21,7 +21,7 @@ c7.loadMore = () => {
 
 export default Controller.extend({
 
-  myInput: A(),
+  myInput: A([c2, c3, c6, c7]),
   myAll: A([c1,c2,c3,c6,c7]),
 
   actions: {
