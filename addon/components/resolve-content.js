@@ -38,6 +38,8 @@ export default Component.extend({
         }
       };
 
+      //TODO use case for resolving more than one provided "content"
+
       if (isPlainArray && !isPlainPromiseArray){
         sanitizedContent.addObjects(content);
         return;
