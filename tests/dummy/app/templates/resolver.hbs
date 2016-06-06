@@ -4,3 +4,18 @@
     {{item.label}}
   {{/each}}
 {{/resolve-content}}
+<hr/>
+{{#resolve-content content=subcategoryData as |resolvedContent|}}
+  {{resolvedContent.length}}
+  {{#each resolvedContent as |item|}}
+    {{item.label}}
+  {{/each}}
+{{/resolve-content}}
+<hr/>
+{{#resolve-content content=model as |resolvedContent|}}
+  {{resolvedContent.length}}
+  {{#each resolvedContent as |item|}}
+    {{item.label}}
+  {{/each}}
+{{/resolve-content}}
+<hr/>

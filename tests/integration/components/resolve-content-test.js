@@ -63,7 +63,9 @@ test('it resolves with plain arrays', function(assert) {
 
 test('it resolves with promise that contains an array', function(assert) {
 
-  const promise = new Promise((resolve) => {
+  //const promise = ;
+
+  this.set('promise', new Promise((resolve) => {
       const array = A([
         {
           id: 'A',
@@ -82,9 +84,7 @@ test('it resolves with promise that contains an array', function(assert) {
         console.log('resolving',array);
         resolve(array);
       }, 1000);
-  });
-
-  this.set('promise', promise);
+  }));
 
   this.render(hbs`
     {{#resolve-content content=promise as |resolvedContent|}}
