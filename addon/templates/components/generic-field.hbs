@@ -6,6 +6,7 @@
   {{else}}
     <label>[]</label>
   {{/each}}
+  <button {{action 'loadMore' parent}}>more..</button>
 </span>
 
 <br>
@@ -20,6 +21,7 @@
       tree=s.tree
       parent=s.item
       limit=s.limit
+      loadMore=(action loadMore)
       addSelection=(action 'addSelection')
       removeSelection=(action 'removeSelection')}}
 

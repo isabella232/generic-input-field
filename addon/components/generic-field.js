@@ -52,6 +52,9 @@ export default Component.extend({
   }),
 
   actions: {
+    loadMore(item) {
+      this.get('loadMore')(item);
+    },
     addToSelection(item) {
       const optionValuePath = this.get('optionValuePath');
       this.get('addSelection')({ [get(item, optionValuePath)]: {} }, this.get(`parent.${optionValuePath}`));
