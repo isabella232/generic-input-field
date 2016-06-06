@@ -24,7 +24,6 @@ export default Component.extend({
     const all = this.get('all');
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
-    console.log(all)
     const findParent = (item) => all.find((parent) => {
       return get(parent, optionChildrenPath).indexOf(item) !== -1;
     });
