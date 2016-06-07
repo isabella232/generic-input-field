@@ -14,9 +14,15 @@ const c8 = { id: 8, label: 'd1', children: [] };
 
 c2.parent = c1; c3.parent = c1; c5.parent = c1;
 
-c7.loadMore = () => {
-  c7.children.push(c8);
-  return [c8];
+c7.loadMore = (queryString) => {
+  A(c7.children).addObject(c8);
+  const x = { id: Math.random(), label: `foo ${queryString} foo`, children: [] };
+  const result = [c8];
+  if (queryString && queryString.length) {
+    A(c7.children).addObject(x);
+    result.push(x);
+  }
+  return result;
 };
 
 export default Controller.extend({
@@ -25,25 +31,18 @@ export default Controller.extend({
   myAll: A([c1,c2,c3,c6,c7]),
 
   actions: {
-    searchMore(queryString, item) {
-      if (!item) {
-        this.get('myAll').addObject({
-          id: Math.random(),
-          label: `some ${queryString} some`,
-          children: []
-      });
-      }
-    },
 
-    loadMore(item) {
-
+    loadMore(item, queryString) {
       if (item) {
-        if (item.loadhMore) {
-          const more = item.loadMore();
+        if (item.loadMore) {
+          const more = item.loadMore(queryString);
           this.get('myAll').addObjects(more);
         }
       } else {
         this.get('myAll').addObjects([c4, c5]);
+        if (queryString && queryString.length) {
+          this.get('myAll').addObject({ id: Math.random(), label: `some ${queryString} some`, children: [] });
+        }
       }
     },
 

@@ -2,6 +2,7 @@ import Ember from 'ember';
 import layout from '../templates/components/generic-field';
 const { A, Component, computed, set } = Ember;
 
+let oldQueryString;
 const get = (object, key) => { // TODO: use Ember.get
   return object.get ? object.get(key) : object[key];
 };
@@ -15,7 +16,7 @@ export default Component.extend({
   optionValuePath: 'id',
   limit: 0,
 
-  filteredContent: computed('selections', 'content', 'queryString', function() {
+  filteredContent: computed('selections', 'content.length', 'queryString', function() {
     const queryString = this.get('queryString');
     const content = this.get('content');
     const limit = this.get('limit');
@@ -41,11 +42,13 @@ export default Component.extend({
       return [];
     }
 
-    return content.filter((item) =>{
+    const result = content.filter((item) => {
       return selectedIds.indexOf(get(item, optionValuePath)) === -1 &&
              ( !!get(item, optionLabelPath).match(queryString) ||
                !!get(item, optionValuePath).toString().match(`^${queryString}`));
     });
+
+    return result;
   }),
 
   selections: computed('tree', function() {
@@ -59,12 +62,12 @@ export default Component.extend({
     selections = selections.map((item) => {
 
       if (item) {
-        return {
+        return Ember.Object.create({
           item,
           limit: get(item, optionLimitPath),
           content: A(get(item, optionChildrenPath)),
           tree: tree[get(item, optionValuePath)]
-        };
+        });
       } else {
         return {
           collapsed: true,
@@ -81,7 +84,11 @@ export default Component.extend({
 
   actions: {
     searchMore(parent, queryString) {
-      this.get('searchMore')(queryString, parent);
+      if (queryString != oldQueryString) {
+        oldQueryString = queryString;
+        console.log('SEARCH MORE');
+        this.get('loadMore')(parent, queryString);
+      }
     },
     loadMore(item) {
       this.get('loadMore')(item);

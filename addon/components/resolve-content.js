@@ -14,63 +14,61 @@ export default Component.extend({
   },
 
   contentChanged: Ember.observer('content.[]', function() {
-    this.sanitize();
-
-    const sanitizedContent = this.get('sanitizedContent');
-    console.log(sanitizedContent.get('length'));
-  }),
-
-  contentChanged: Ember.observer('sanitizedContent.[]', function() {
-    const sanitizedContent = this.get('sanitizedContent');
-    console.log('ruperts observer');
-    console.log(sanitizedContent.get('length'));
+    this.sanitize().then(() => {
+      let newArray = this.get('sanitizedContent');
+      newArray = A(Array.from(newArray));
+      this.set('sanitizedContent', newArray);
+    });
   }),
 
   sanitize() {
-    schedule('afterRender', this, () => {
+    return new Promise((resolve) => {
+      schedule('afterRender', this, () => {
 
-      const content = this.get('content');
-      if (!content) {
-        throw 'content must be set for generic-input-field';
-      }
-      const sanitizedContent = this.get('sanitizedContent');
-      const isPlainArray = typeof content.length === 'number';
-      const isPlainPromiseArray = content[0] && content[0].constructor === Promise;
-      const isPromise = content.constructor === Promise;
-
-      const pushItems = (content) => {
-        const isPromise = content.get('firstObject.constructor') === Promise;
-        if (isPromise) {
-          Promise.all(content).then((rc) => sanitizedContent.addObjects(rc));
-        } else {
-          sanitizedContent.addObjects(content);
+        const content = this.get('content');
+        if (!content) {
+          throw 'content must be set for generic-input-field';
         }
-      };
+        const sanitizedContent = this.get('sanitizedContent');
+        const isPlainArray = typeof content.length === 'number';
+        const isPlainPromiseArray = content[0] && content[0].constructor === Promise;
+        const isPromise = content.constructor === Promise;
 
-      if (isPlainArray && !isPlainPromiseArray){
-        sanitizedContent.addObjects(content);
-        return;
-      }
+        const pushItems = (content) => {
+          const isPromise = content.get('firstObject.constructor') === Promise;
+          if (isPromise) {
+            Promise.all(content).then((rc) => sanitizedContent.addObjects(rc));
+          } else {
+            sanitizedContent.addObjects(content);
+          }
+        };
 
-      if (isPlainArray && isPlainPromiseArray){
-        Promise.all(content).then((rc) => sanitizedContent.addObjects(rc));
-        return;
-      }
+        if (isPlainArray && !isPlainPromiseArray){
+          sanitizedContent.addObjects(content);
+          resolve();
+        }
 
-      if (isPromise){
-        content.then((x) => { sanitizedContent.addObjects(x); });
-        return;
-      }
+        if (isPlainArray && isPlainPromiseArray){
+          Promise.all(content).then((rc) => sanitizedContent.addObjects(rc));
+          resolve();
+        }
 
-      if (!isPromise && content.isLoaded) {
-        pushItems(content);
-        return;
-      }
+        if (isPromise){
+          content.then((x) => { sanitizedContent.addObjects(x); });
+          resolve();
+        }
 
-      if (!isPromise && !content.isLoaded) {
-        content.then(pushItems);
-        return;
-      }
+        if (!isPromise && content.isLoaded) {
+          pushItems(content);
+          resolve();
+        }
+
+        if (!isPromise && !content.isLoaded) {
+          //content.then(pushItems);  TODO: investigate which line + add TESTS
+          pushItems(content);     //  TODO: investigate which line
+          resolve();
+        }
+      });
     });
 
   }

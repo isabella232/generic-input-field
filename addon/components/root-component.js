@@ -14,7 +14,7 @@ export default Component.extend({
   optionValuePath: 'id',
   limit: 0,
 
-  myTree: computed('input.[]', 'all.[]', function() {
+  myTree: computed('input.[]', function() {
     const items = this.get('input');
     const all = this.get('all');
     const optionChildrenPath = this.get('optionChildrenPath');
@@ -83,7 +83,6 @@ export default Component.extend({
     },
 
     removeSelection(array) {
-      console.log('inside method');
       const all = this.get('all');
       const input = this.get('input');
       const removeSelection = this.get('removeSelection');
