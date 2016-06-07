@@ -116,6 +116,9 @@ export default Component.extend({
     removeSelection(ids, id) {
       const optionValuePath = this.get('optionValuePath');
       this.get('removeSelection')([id, ...ids], this.get(`parent.${optionValuePath}`));
-    }
+    },
+    // selectSuggestion(suggestion){
+    //   console.log('suggestion:',suggestion)
+    // }
   }
 });

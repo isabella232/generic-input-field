@@ -13,17 +13,18 @@ export default Component.extend({
     this._super();
   },
 
-  contentChanged: Ember.observer('content.[]', function() {
+  contentChanged1: Ember.observer('content.[]', function() {
+    this.get('sanitizedContent').clear();
     this.sanitize();
-
-    const sanitizedContent = this.get('sanitizedContent');
-    console.log(sanitizedContent.get('length'));
+    const content = this.get('content');
+    console.log('content len:',content.get('length'));
+    console.log('content -:',content);
   }),
 
-  contentChanged: Ember.observer('sanitizedContent.[]', function() {
+  contentChanged2: Ember.observer('sanitizedContent.[]', function() {
     const sanitizedContent = this.get('sanitizedContent');
-    console.log('ruperts observer');
-    console.log(sanitizedContent.get('length'));
+    console.log('sanitizedContent len:',sanitizedContent.get('length'));
+    console.log('sanitizedContent -:',sanitizedContent);
   }),
 
   sanitize() {

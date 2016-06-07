@@ -1,10 +1,15 @@
 {{#resolve-content content=all as |resolvedAll|}}
 
+  {{log 'root-<'}}
+  {{log resolvedAll.length}}
+  {{log 'root->'}}
+
   {{resolvedAll.length}}
   {{#if resolvedAll.length}}
     {{generic-field
       content=(get-parents resolvedAll)
       tree=myTree
+      suggestions=suggestions
 
       limit=limit
       optionLabelPath=optionLabelPath
@@ -12,6 +17,7 @@
       optionChildrenPath=optionChildrenPath
       optionLimitPath=optionLimitPath
 
+      selectSuggestion=(action selectSuggestion)
       loadMore=(action loadMore)
       searchMore=(action searchMore)
       addSelection=(action 'addSelection')

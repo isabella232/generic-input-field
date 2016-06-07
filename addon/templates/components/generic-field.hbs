@@ -9,10 +9,10 @@
   <button {{action 'loadMore' parent}}>more..</button>
 </span>
 
-{{input value=queryString key-up=(action 'searchMore' parent)}}
+{{input value=queryString key-up=(action 'searchMore' parent) enter=(action selectSuggestion suggestions.firstObject) }}
 {{suggestions.length}}
 {{#each suggestions as |suggestion|}}
- {{suggestion.label}}
+ <b {{action selectSuggestion suggestion}}>{{suggestion.label}}</b>
 {{/each}}
 <br>
 
@@ -33,6 +33,7 @@
         limit=s.limit
         loadMore=(action loadMore)
         searchMore=(action searchMore)
+        selectSuggestion=(action selectSuggestion)
         addSelection=(action 'addSelection')
         removeSelection=(action 'removeSelection')}}
     {{/if}}

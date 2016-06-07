@@ -23,11 +23,12 @@ export default Controller.extend({
 
   myInput: A([c2, c3, c6, c7]),
   myAll: A([c1,c2,c3,c6,c7]),
+  mySuggestions: A(),
 
   actions: {
     searchMore(queryString, item) {
       if (!item) {
-        this.get('myAll').addObject({
+        this.get('mySuggestions').addObject({
           id: Math.random(),
           label: `some ${queryString} some`,
           children: []
@@ -54,6 +55,16 @@ export default Controller.extend({
     removeMySelection(item) {
       this.get('myInput').removeObject(item);
       this.get('myInput').removeObjects(item.children);
+    },
+
+    //TODO pass parent too
+    selectSuggestion(suggestion){
+      console.log('selectSuggestion:',suggestion);
+      // if (!suggestion) {
+        this.get('myAll').addObject(suggestion);
+      // }else{
+
+      // }
     }
   }
 
