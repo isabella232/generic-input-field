@@ -29,7 +29,6 @@ export default Component.extend({
         return rec([], s.tree);
       } else {
         const id = get(s.item, optionValuePath);
-        console.log(id);
         return id;
       }
     });
@@ -40,7 +39,6 @@ export default Component.extend({
       return [];
     }
 
-    console.log(selectedIds);
     return content.filter((item) =>{
       return selectedIds.indexOf(get(item, optionValuePath)) === -1;
     });
@@ -91,6 +89,7 @@ export default Component.extend({
       this.get('addSelection')({ [id]: hash }, this.get(`parent.${optionValuePath}`));
     },
     removeTreeFromSelection(tree) {
+      const parentId = this.get('parent.id');
       const rec = (array, hash) => {
         const keys = Object.keys(hash);
         if (keys.length === 0) {
@@ -101,7 +100,7 @@ export default Component.extend({
       };
 
       const ids = rec([], tree);
-      this.get('removeTreeSelection')(ids);
+      ids.forEach((id) => this.get('removeSelection')([+id], parentId));
     },
     removeFromSelection(item) {
       const optionValuePath = this.get('optionValuePath');

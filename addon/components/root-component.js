@@ -82,19 +82,8 @@ export default Component.extend({
       addSelection(item);
     },
 
-    removeTreeSelection(array) {
-      const all = this.get('all');
-      const optionValuePath = this.get('optionValuePath');
-      const removeSelection = this.get('removeSelection');
-
-      const items = array.map((id) => {
-        return all.find((item) => get(item, optionValuePath) === +id);
-      });
-
-      items.forEach(removeSelection);
-    },
-
     removeSelection(array) {
+      console.log('inside method');
       const all = this.get('all');
       const input = this.get('input');
       const removeSelection = this.get('removeSelection');
