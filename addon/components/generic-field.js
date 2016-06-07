@@ -15,10 +15,12 @@ export default Component.extend({
   optionValuePath: 'id',
   limit: 0,
 
-  filteredContent: computed('selections', 'content', function() {
+  filteredContent: computed('selections', 'content', 'queryString', function() {
+    const queryString = this.get('queryString');
     const content = this.get('content');
     const limit = this.get('limit');
     const optionValuePath = this.get('optionValuePath');
+    const optionLabelPath = this.get('optionLabelPath');
     let selectedIds = this.get('selections').map((s) => {
       if (s.collapsed) {
         const rec = (array, hash) => {
@@ -40,7 +42,9 @@ export default Component.extend({
     }
 
     return content.filter((item) =>{
-      return selectedIds.indexOf(get(item, optionValuePath)) === -1;
+      return selectedIds.indexOf(get(item, optionValuePath)) === -1 &&
+             ( !!get(item, optionLabelPath).match(queryString) ||
+               !!get(item, optionValuePath).toString().match(`^${queryString}`));
     });
   }),
 
@@ -76,6 +80,9 @@ export default Component.extend({
   }),
 
   actions: {
+    searchMore(parent, queryString) {
+      this.get('searchMore')(queryString, parent);
+    },
     loadMore(item) {
       this.get('loadMore')(item);
     },

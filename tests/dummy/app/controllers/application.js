@@ -25,11 +25,23 @@ export default Controller.extend({
   myAll: A([c1,c2,c3,c6,c7]),
 
   actions: {
+    searchMore(queryString, item) {
+      if (!item) {
+        this.get('myAll').addObject({
+          id: Math.random(),
+          label: `some ${queryString} some`,
+          children: []
+      });
+      }
+    },
+
     loadMore(item) {
 
-      if (item && item.loadMore) {
-        const more = item.loadMore();
-        this.get('myAll').addObjects(more);
+      if (item) {
+        if (item.loadhMore) {
+          const more = item.loadMore();
+          this.get('myAll').addObjects(more);
+        }
       } else {
         this.get('myAll').addObjects([c4, c5]);
       }

@@ -8,16 +8,25 @@ export default Component.extend({
   content: null, // <- mandatory and array
 
   init() {
+    this.set('sanitizedContent', A());
     this.sanitize();
     this._super();
   },
 
   contentChanged: Ember.observer('content.[]', function() {
     this.sanitize();
+
+    const sanitizedContent = this.get('sanitizedContent');
+    console.log(sanitizedContent.get('length'));
+  }),
+
+  contentChanged: Ember.observer('sanitizedContent.[]', function() {
+    const sanitizedContent = this.get('sanitizedContent');
+    console.log('ruperts observer');
+    console.log(sanitizedContent.get('length'));
   }),
 
   sanitize() {
-    this.set('sanitizedContent', A());
     schedule('afterRender', this, () => {
 
       const content = this.get('content');
@@ -37,8 +46,6 @@ export default Component.extend({
           sanitizedContent.addObjects(content);
         }
       };
-
-      //TODO use case for resolving more than one provided "content"
 
       if (isPlainArray && !isPlainPromiseArray){
         sanitizedContent.addObjects(content);
