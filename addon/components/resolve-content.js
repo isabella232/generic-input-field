@@ -3,6 +3,7 @@ import layout from '../templates/components/resolve-content';
 const { A, Component, run: { schedule }, RSVP: { Promise } } = Ember;
 
 export default Component.extend({
+  tagName: '',
   layout,
 
   content: null, // <- mandatory and array

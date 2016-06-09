@@ -9,8 +9,9 @@ const get = (object, key) => { // TODO: use Ember.get
 
 export default Component.extend({
   layout,
-  tagName: 'span',
-  classNames: ['generic-field'],
+  tagName: '',
+  //tagName: 'div',
+  //classNames: ['generic-field'],
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
@@ -84,14 +85,13 @@ export default Component.extend({
 
   actions: {
     searchMore(parent, queryString) {
-      if (queryString != oldQueryString) {
+      if (queryString !== oldQueryString && queryString !== '') {
         oldQueryString = queryString;
-        console.log('SEARCH MORE');
         this.get('loadMore')(parent, queryString);
       }
     },
-    loadMore(item) {
-      this.get('loadMore')(item);
+    loadMore(parent) {
+      this.get('loadMore')(parent);
     },
     addToSelection(item) {
       set(item, 'expand', true);
@@ -123,6 +123,9 @@ export default Component.extend({
     removeSelection(ids, id) {
       const optionValuePath = this.get('optionValuePath');
       this.get('removeSelection')([id, ...ids], this.get(`parent.${optionValuePath}`));
+    },
+    setActive(target, state) {
+      this.set(`${target}IsActive`, state);
     }
   }
 });
