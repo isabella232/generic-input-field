@@ -4,6 +4,7 @@ const { A, Component, run: { schedule }, RSVP: { Promise }, ArrayProxy } = Embe
 const esPromise = window.Promise;
 
 export default Component.extend({
+  tagName: '',
   layout,
 
   content: null, // <- mandatory and array

@@ -1,20 +1,21 @@
 {{#resolve-content content=all as |resolvedAll|}}
 
-  {{resolvedAll.length}}
   {{#if resolvedAll.length}}
-    {{generic-field
-      content=(get-parents resolvedAll)
-      tree=myTree
+    <div class='generic-field'>
+      {{generic-field
+        content=(get-parents resolvedAll)
+        tree=myTree
 
-      limit=limit
-      optionLabelPath=optionLabelPath
-      optionValuePath=optionValuePath
-      optionChildrenPath=optionChildrenPath
-      optionLimitPath=optionLimitPath
+        limit=limit
+        optionLabelPath=optionLabelPath
+        optionValuePath=optionValuePath
+        optionChildrenPath=optionChildrenPath
+        optionLimitPath=optionLimitPath
 
-      loadMore=(action loadMore)
-      addSelection=(action 'addSelection')
-      removeSelection=(action 'removeSelection')}}
+        loadMore=(action loadMore)
+        addSelection=(action 'addSelection')
+        removeSelection=(action 'removeSelection')}}
+    </div>
   {{else}}
     loading...
   {{/if}}

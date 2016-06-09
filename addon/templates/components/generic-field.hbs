@@ -1,4 +1,11 @@
-<span style='background: rgba(255, 165, 0, 0.5)'>
+{{input value=queryString
+  key-up=(action 'searchMore' parent)
+  focus-out=(action 'setActive' 'input' false)
+  focus-in=(action 'setActive' 'input' true)}}
+
+<div class='content {{if contentIsActive 'active'}} {{if inputIsActive 'active'}}'
+  {{action 'setActive' 'content' true on='mouseEnter'}}
+  {{action 'setActive' 'content' false on='mouseLeave'}}>
   {{#each filteredContent as |item|}}
     <label {{action 'addToSelection' item}}>
       {{get item optionLabelPath}}
@@ -7,33 +14,29 @@
     <label>[]</label>
   {{/each}}
   <button {{action 'loadMore' parent}}>more..</button>
-</span>
-
-{{input value=queryString key-up=(action 'searchMore' parent)}}
-{{content.length}}
-<br>
-
-<span style='background: rgba(50, 205, 50, 0.5)'>
+</div>
+<div class='selection'>
   {{#each selections as |s|}}
-    {{#if s.collapsed}}
-      <label {{action 'removeTreeFromSelection' s.tree}}>
-        {{s.count}} collapsed items
-      </label>
-    {{else}}
-      <label {{action 'removeFromSelection' s.item}}>
-        {{get s.item optionLabelPath}}
-      </label>
-      {{generic-field
-        content=s.content
-        tree=s.tree
-        parent=s.item
-        limit=s.limit
-        loadMore=(action loadMore)
-        addSelection=(action 'addSelection')
-        removeSelection=(action 'removeSelection')}}
-    {{/if}}
+    <div class='generic-field'>
+      {{#if s.collapsed}}
+        <label {{action 'removeTreeFromSelection' s.tree}}> X </label>
+        <label class='collapsed'> {{s.count}} collapsed items </label>
+      {{else}}
+        <label {{action 'removeFromSelection' s.item}}> X </label>
+        <label class='collapsed'> {{get s.item optionLabelPath}} </label>
+        {{generic-field
+          content=s.content
+          tree=s.tree
+          parent=s.item
+          limit=s.limit
+          loadMore=(action loadMore)
+          addSelection=(action 'addSelection')
+          removeSelection=(action 'removeSelection')}}
+      {{/if}}
+    </div>
 
   {{else}}
-    <label>[]</label>
+    <div class='generic-field last'><div class='selection'></div></div>
+    <!--label>[]</label-->
   {{/each}}
-</span>
+</div>
