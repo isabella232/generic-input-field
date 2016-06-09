@@ -23,7 +23,7 @@ export default Component.extend({
       return get(parent, optionChildrenPath).indexOf(item) !== -1;
     });
 
-    const rec = (hash, parent) => {
+    const recBuildPath = (hash, parent) => {
       const nextParent = findParent(parent);
 
       if (!parent) {
@@ -31,37 +31,44 @@ export default Component.extend({
       }
 
       if (nextParent) {
-        return rec({ [get(parent, optionValuePath)]: hash }, nextParent);
+        return recBuildPath({ [get(parent, optionValuePath)]: hash }, nextParent);
       } else {
         return { [get(parent, optionValuePath)]: hash };
       }
 
     };
 
-    const paths = items.map(item => rec({ [get(item, optionValuePath)]: {} }, findParent(item)));
+    const paths = items.map(item => recBuildPath({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
     const tree = assign({}, ...paths);
 
-    const rec2 = (hash) => {
+    const recBuildTree = (hash, parentKey) => {
       const keys = Object.keys(hash);
 
       const expandedKeys = keys.filter((key) => get(all.findBy(optionValuePath, +key), 'expand'));
       const collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, +key), 'expand'));
 
-      expandedKeys.forEach((key) => rec2(hash[key]));
+      const parent = all.findBy(optionValuePath, +parentKey);
+      let limit = 0;
+      if(parent){
+        limit = get(parent, 'limit') ? get(parent, 'limit') : 0;
+      }
 
-      if (collapsedKeys.length >= 3) {
+      expandedKeys.forEach((key) => recBuildTree(hash[key], key));
+
+      if (limit !== 0 && collapsedKeys.length >= limit) {
         hash.collapsed = {};
         collapsedKeys.forEach((key) => {
           hash.collapsed[key] = hash[key];
           delete hash[key];
         });
       } else {
-        collapsedKeys.forEach((key) => rec2(hash[key]));
+        collapsedKeys.forEach((key) => recBuildTree(hash[key], key));
       }
     };
 
-    rec2(tree);
+    recBuildTree(tree);
+
     return tree;
   }),
 

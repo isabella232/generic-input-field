@@ -15,6 +15,7 @@ export default Component.extend({
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
+  optionLimitPath: 'limit',
   limit: 0,
 
   filteredContent: computed('selections', 'content.length', 'queryString', function() {
