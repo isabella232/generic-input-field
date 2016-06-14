@@ -44,9 +44,10 @@ export default Component.extend({
     }
 
     const result = content.filter((item) => {
-      return selectedIds.indexOf(get(item, optionValuePath)) === -1 &&
-             ( !!get(item, optionLabelPath).match(queryString) ||
-               !!get(item, optionValuePath).toString().match(`^${queryString}`));
+      const notSelected = selectedIds.indexOf(get(item, optionValuePath)) === -1;
+      const matchesLabel = !!(get(item, optionLabelPath) || '').match(queryString);
+      const matchesId = !!get(item, optionValuePath).toString().match(`^${queryString}`);
+      return notSelected && ( matchesLabel || matchesId);
     });
 
     return result;

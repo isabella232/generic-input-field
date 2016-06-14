@@ -45,8 +45,8 @@ export default Component.extend({
     const rec2 = (hash) => {
       const keys = Object.keys(hash);
 
-      const expandedKeys = keys.filter((key) => get(all.findBy('id', +key), 'expand'));
-      const collapsedKeys = keys.filter((key) => !get(all.findBy('id', +key), 'expand'));
+      const expandedKeys = keys.filter((key) => get(all.findBy(optionValuePath, +key), 'expand'));
+      const collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, +key), 'expand'));
 
       expandedKeys.forEach((key) => rec2(hash[key]));
 
