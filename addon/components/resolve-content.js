@@ -49,13 +49,11 @@ export default Component.extend({
         };
 
         if (isPlainArray && !isArrayWithEmberPromises){
-          console.log('isPlainArray && !isArrayWithEmberPromises')
           sanitizedContent.addObjects(content);
           resolve();
         }
 
         if (isPlainArray && isArrayWithEmberPromises){
-          console.log('isPlainArray && isArrayWithEmberPromises');
           Promise.all(content).then(rc => {
             sanitizedContent.addObjects(rc)
             resolve();
@@ -63,27 +61,23 @@ export default Component.extend({
         }
 
         if (isEmberPromise){
-          console.log('isEmberPromise');
           content.then((x) => { sanitizedContent.addObjects(x); });
           resolve();
         }
 
         //check for subclasses of ArrayProxy still untested
         if (!isEmberPromise && isLoadedDefined && content.isLoaded){
-          console.log('!isEmberPromise && isLoadedDefined && content.isLoaded');
           pushItems(content);
           resolve();
         }
 
         //check for subclasses of ArrayProxy stil untested
         if (!isEmberPromise && isLoadedDefined && !content.isLoaded){
-          console.log('!isEmberPromise && isLoadedDefined && !content.isLoaded');
           content.then(pushItems);
           resolve();
         }
 
         if(isArrayProxy){
-          console.log('isArrayProxy');
           pushItems(content);
           resolve();
         }
