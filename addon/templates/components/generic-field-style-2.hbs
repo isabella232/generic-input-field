@@ -1,0 +1,42 @@
+{{input value=queryString
+  key-up=(action 'searchMore' parent)
+  focus-out=(action 'setActive' 'input' false)
+  focus-in=(action 'setActive' 'input' true)}}
+
+<div class='content {{if contentIsActive 'active'}} {{if inputIsActive 'active'}}'
+  {{action 'setActive' 'content' true on='mouseEnter'}}
+  {{action 'setActive' 'content' false on='mouseLeave'}}>
+
+  <ul>
+    {{#each filteredContent as |item|}}
+      <li {{action 'addToSelection' item}}> {{get item optionLabelPath}} </li>
+    {{/each}}
+  </ul>
+
+  <button {{action 'loadMore' parent}}>more..</button>
+</div>
+<div class='selection'>
+  {{#each selections as |s|}}
+    <div class='field-2'>
+      {{#if s.collapsed}}
+        <label {{action 'removeTreeFromSelection' s.tree}}> x </label>
+        <label class='collapsed'> {{s.count}} collapsed items </label>
+      {{else}}
+        <label {{action 'removeFromSelection' s.item}}> x </label>
+        <label class='collapsed'> {{get s.item optionLabelPath}} </label>
+        {{generic-field
+          content=s.content
+          tree=s.tree
+          parent=s.item
+          limit=s.limit
+          loadMore=(action loadMore)
+          addSelection=(action 'addSelection')
+          removeSelection=(action 'removeSelection')}}
+      {{/if}}
+    </div>
+
+  {{else}}
+    <div class='field-2 last'><div class='selection'></div></div>
+    <!--label>[]</label-->
+  {{/each}}
+</div>
