@@ -77,7 +77,7 @@ input {
   position: absolute;
   top: 160px;
   left: 0;
-  background: rgba(255, 165, 0, 1);
+  background: white;
 }
 
 .content.active {
@@ -86,4 +86,98 @@ input {
 
 .selection {
   display: inline;
+}
+
+
+
+
+
+
+
+/* ------------------ */
+
+
+.field-2.last {
+  opacity: 0;
+}
+.field-2 {
+  background: rgba(1,1,1,0.1);
+  display: inline-block;
+  border: 1px solid rgba(1,1,1,0.2);
+  box-sizing: border-box;
+  position: relative;
+  margin: 2px;
+}
+
+label {
+  vertical-align: top;
+  cursor: pointer;
+}
+label.collapsed {
+  white-space: nowrap;
+  display: block;
+  width: auto !important;
+  cursor: default !important;
+}
+.field-2 .content { top: 40px; z-index: 2; right: 0; }
+.field-2 input { font-size: 30px; border-radius: 6px; }
+.field-2 .selection { font-size: 25px; }
+.field-2 label { display: inline-block; min-height: 30px; line-height: 30px; width: 20px; }
+.field-2 {
+  min-height: 30px; line-height: 30px; border-radius: 6px; margin-left: 20px;
+}
+
+.field-2 .field-2 .content { top: 35px; }
+.field-2 .field-2 input { font-size: 25px; border-radius: 5px; }
+.field-2 .field-2 .selection { font-size: 20px; }
+.field-2 .field-2 label { display: inline-block; min-height: 30px; line-height: 30px; width: 18px; }
+.field-2 .field-2 {
+  min-height: 25px; line-height: 25px; border-radius: 5px;
+}
+
+.field-2 .field-2 .field-2 .content { top: 30px; }
+.field-2 .field-2 .field-2 input { font-size: 20px; border-radius: 4px; }
+.field-2 .field-2 .field-2 .selection { font-size: 15px; }
+.field-2 .field-2 .field-2 label { display: inline-block; min-height: 25px; line-height: 25px; width: 16px; }
+.field-2 .field-2 .field-2 {
+  min-height: 20px; line-height: 20px; border-radius: 4px;
+}
+
+.field-2 .field-2 .field-2 .field-2 .content { top: 25px; }
+.field-2 .field-2 .field-2 .field-2 input { height: 100%; font-size: 15px; border-radius: 3px; }
+.field-2 .field-2 .field-2 .field-2 .selection { font-size: 10px; }
+.field-2 .field-2 .field-2 .field-2 label { display: inline-block; min-height: 20px; line-height: 20px; width: 14px; }
+.field-2 .field-2 .field-2 .field-2 {
+  min-height: 15px; line-height: 15px; border-radius: 3px;
+}
+
+.field-2 .field-2 .field-2 .field-2 .field-2 .content { top: 20px; }
+.field-2 .field-2 .field-2 .field-2 .field-2 input { font-size: 10px; border-radius: 2px; }
+.field-2 .field-2 .field-2 .field-2 .field-2 .selection { font-size: 5px; }
+.field-2 .field-2 .field-2 .field-2 .field-2 label { display: inline-block; min-height: 15px; line-height: 15px; width: 12px; }
+.field-2 .field-2 .field-2 .field-2 .field-2 {
+  min-height: 10px; line-height: 10px; border-radius: 2px;
+}
+
+
+ul {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+li {
+    padding-left: 1em;
+    text-indent: 1.5em;
+}
+
+li:before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #08adda;
+  border: 5px solid #e8e8e8;
+  border-radius: 50%;
+  display: block;
+  position: absolute;
 }

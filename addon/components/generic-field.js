@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/generic-field';
+import layout from '../templates/components/generic-field-style-2';
 const { A, Component, computed, set } = Ember;
 
 let oldQueryString;
