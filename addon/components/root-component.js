@@ -20,7 +20,12 @@ export default Component.extend({
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
     const findParent = (item) => all.find((parent) => {
-      return get(parent, optionChildrenPath).indexOf(item) !== -1;
+      const children = get(parent, optionChildrenPath);
+      if(typeof children === 'undefined'){
+        return false;
+      }else{
+        return children.indexOf(item) !== -1;
+      }
     });
 
     const rec = (hash, parent) => {
