@@ -50,13 +50,11 @@ export default Component.extend({
         };
 
         if (isPlainArray && !isArrayWithEmberPromises && !isDSPromiseArray){
-          console.log('isPlainArray && !isArrayWithEmberPromises');
           sanitizedContent.addObjects(content);
           resolve();
         }
 
         if (isPlainArray && isArrayWithEmberPromises && !isDSPromiseArray){
-          console.log('isPlainArray && isArrayWithEmberPromises');
           Promise.all(content).then(rc => {
             sanitizedContent.addObjects(rc);
             resolve();
@@ -64,37 +62,30 @@ export default Component.extend({
         }
 
         if(isDSPromiseArray){
-          console.log('isDSPromiseArray');
-          console.log('DSPromiseArray:',content);
           content.then(rc => {
-            console.log('rc:', rc);
             sanitizedContent.addObjects(rc);
             resolve();
           });
         }
 
         if (isEmberPromise){
-          console.log('isEmberPromise');
           content.then((x) => { sanitizedContent.addObjects(x); });
           resolve();
         }
 
-        //check for subclasses of ArrayProxy still untested
         if (!isEmberPromise && isLoadedDefined && content.isLoaded){
-          console.log('!isEmberPromise && isLoadedDefined && content.isLoaded');
           pushItems(content);
           resolve();
         }
 
-        //check for subclasses of ArrayProxy stil untested
+        // check for subclasses of ArrayProxy stil untested
+        // we now check for DSPromiseArray, so we could remove comment..
         if (!isEmberPromise && isLoadedDefined && !content.isLoaded){
-          console.log('!isEmberPromise && isLoadedDefined && !content.isLoaded');
           content.then(pushItems);
           resolve();
         }
 
         if(isArrayProxy){
-          console.log('isArrayProxy');
           pushItems(content);
           resolve();
         }
