@@ -38,6 +38,7 @@ export default Component.extend({
         // const isES6Promise = content.constructor.toString() === esPromise.toString();
         const isLoadedDefined = typeof content.isLoaded !== 'undefined';
         const isArrayProxy = content.constructor.toString() === 'Ember.ArrayProxy';
+        const isDSPromiseArray = content.constructor.toString() === 'DS.PromiseArray';
 
         const pushItems = (content) => {
           const isPromise = content.get('firstObject.constructor') === Promise;
@@ -48,36 +49,52 @@ export default Component.extend({
           }
         };
 
-        if (isPlainArray && !isArrayWithEmberPromises){
+        if (isPlainArray && !isArrayWithEmberPromises && !isDSPromiseArray){
+          console.log('isPlainArray && !isArrayWithEmberPromises');
           sanitizedContent.addObjects(content);
           resolve();
         }
 
-        if (isPlainArray && isArrayWithEmberPromises){
+        if (isPlainArray && isArrayWithEmberPromises && !isDSPromiseArray){
+          console.log('isPlainArray && isArrayWithEmberPromises');
           Promise.all(content).then(rc => {
             sanitizedContent.addObjects(rc);
             resolve();
           });
         }
 
+        if(isDSPromiseArray){
+          console.log('isDSPromiseArray');
+          console.log('DSPromiseArray:',content);
+          content.then(rc => {
+            console.log('rc:', rc);
+            sanitizedContent.addObjects(rc);
+            resolve();
+          });
+        }
+
         if (isEmberPromise){
+          console.log('isEmberPromise');
           content.then((x) => { sanitizedContent.addObjects(x); });
           resolve();
         }
 
         //check for subclasses of ArrayProxy still untested
         if (!isEmberPromise && isLoadedDefined && content.isLoaded){
+          console.log('!isEmberPromise && isLoadedDefined && content.isLoaded');
           pushItems(content);
           resolve();
         }
 
         //check for subclasses of ArrayProxy stil untested
         if (!isEmberPromise && isLoadedDefined && !content.isLoaded){
+          console.log('!isEmberPromise && isLoadedDefined && !content.isLoaded');
           content.then(pushItems);
           resolve();
         }
 
         if(isArrayProxy){
+          console.log('isArrayProxy');
           pushItems(content);
           resolve();
         }
