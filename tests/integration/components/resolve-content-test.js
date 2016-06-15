@@ -2,7 +2,7 @@ import Ember from 'ember';
 const { A, run, RSVP: { Promise } } = Ember;
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-const esPromise = window.Promise;
+const ESPromise = window.Promise;
 
 moduleForComponent('resolve-content', 'Integration | Component | resolve content', {
   integration: true
@@ -61,17 +61,17 @@ test('it resolves with ember promises', function(assert) {
 test('it resolves with es6 promises', function(assert) {
 
   this.set('promises', [
-    new esPromise((res) => {
+    new ESPromise((res) => {
       setTimeout(() => {
         res({ id: 'aaa', label: 'SSCategory A' });
       } ,100);
     }),
-    new esPromise((res) => {
+    new ESPromise((res) => {
       setTimeout(() => {
         res({ id: 'bbb', label: 'SSCategory B' });
       } ,1000);
     }),
-    new esPromise((res) => {
+    new ESPromise((res) => {
       setTimeout(() => {
         res({ id: 'ccc', label: 'SSCategory C' });
       } ,2000);
@@ -113,9 +113,6 @@ test('it resolves with plain arrays', function(assert) {
 });
 
 test('it resolves with promise that contains an array', function(assert) {
-
-  //const promise = ;
-  //run(()=>{
     this.set('promise', new Promise((resolve) => {
         const array = A([
           {
@@ -132,12 +129,7 @@ test('it resolves with promise that contains an array', function(assert) {
           },
         ]);
         run(null,resolve,array);
-        // setTimeout(() => {
-        //   console.log('resolving',array);
-        //   resolve(array);
-        // }, 1000);
     }));
-  //});
 
   this.render(hbs`
     {{#resolve-content content=promise as |resolvedContent|}}
