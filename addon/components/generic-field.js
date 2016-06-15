@@ -1,17 +1,12 @@
 import Ember from 'ember';
 import layout from '../templates/components/generic-field';
-const { A, Component, computed, set } = Ember;
+const { A, Component, computed, set, get } = Ember;
 
 let oldQueryString;
-const get = (object, key) => { // TODO: use Ember.get
-  return object.get ? object.get(key) : object[key];
-};
 
 export default Component.extend({
   layout,
   tagName: '',
-  //tagName: 'div',
-  //classNames: ['generic-field'],
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
@@ -37,7 +32,7 @@ export default Component.extend({
       }
     });
 
-    selectedIds = [].concat.apply([], selectedIds).map(x => +x);
+    selectedIds = [].concat.apply([], selectedIds);
 
     if (limit && selectedIds.length >= limit) {
       return [];
@@ -60,7 +55,7 @@ export default Component.extend({
     const optionValuePath = this.get('optionValuePath');
     const optionLimitPath = this.get('optionLimitPath');
     let selections = Object.keys(tree);
-    selections = selections.map((id) => content.findBy(optionValuePath, +id));
+    selections = selections.map((id) => content.findBy(optionValuePath, id));
     selections = selections.map((item) => {
 
       if (item) {
@@ -115,7 +110,7 @@ export default Component.extend({
       };
 
       const ids = rec([], tree);
-      ids.forEach((id) => this.get('removeSelection')([+id], parentId));
+      ids.forEach((id) => this.get('removeSelection')([id], parentId));
     },
     removeFromSelection(item) {
       const optionValuePath = this.get('optionValuePath');
