@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/resolve-content';
-const { A, Component, run: { schedule }, RSVP: { Promise }, ArrayProxy } = Ember;
-const esPromise = window.Promise;
+const { A, Component, run: { schedule }, RSVP: { Promise } } = Ember;
+// const esPromise = window.Promise;
 
 export default Component.extend({
   tagName: '',
@@ -35,9 +35,9 @@ export default Component.extend({
         const isPlainArray = typeof content.length === 'number';
         const isArrayWithEmberPromises = content[0] && content[0].constructor === Promise;
         const isEmberPromise = content.constructor.toString() === Promise.toString();
-        const isES6Promise = content.constructor.toString() === esPromise.toString();
-        const isLoadedDefined = typeof content.isLoaded !== 'undefined'
-        const isArrayProxy = content.constructor.toString() === 'Ember.ArrayProxy'
+        // const isES6Promise = content.constructor.toString() === esPromise.toString();
+        const isLoadedDefined = typeof content.isLoaded !== 'undefined';
+        const isArrayProxy = content.constructor.toString() === 'Ember.ArrayProxy';
 
         const pushItems = (content) => {
           const isPromise = content.get('firstObject.constructor') === Promise;
@@ -55,7 +55,7 @@ export default Component.extend({
 
         if (isPlainArray && isArrayWithEmberPromises){
           Promise.all(content).then(rc => {
-            sanitizedContent.addObjects(rc)
+            sanitizedContent.addObjects(rc);
             resolve();
           });
         }
