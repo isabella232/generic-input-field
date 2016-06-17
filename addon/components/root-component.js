@@ -1,9 +1,7 @@
 import Ember from 'ember';
 import assign from '../utils/deep-assign';
 import layout from '../templates/components/root-component';
-const { A, Component, computed } = Ember;
-
-const get = (object, key) => object.get ? object.get(key) : object[key];
+const { A, Component, computed, get } = Ember;
 
 export default Component.extend({
   layout,
@@ -50,8 +48,11 @@ export default Component.extend({
     const rec2 = (hash) => {
       const keys = Object.keys(hash);
 
-      const expandedKeys = keys.filter((key) => get(all.findBy(optionValuePath, +key), 'expand'));
-      const collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, +key), 'expand'));
+      const expandedKeys = keys.filter((key) => {
+        const item = all.findBy(optionValuePath, key);
+        return get(item, 'expand');
+      });
+      const collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), 'expand'));
 
       expandedKeys.forEach((key) => rec2(hash[key]));
 
@@ -79,10 +80,10 @@ export default Component.extend({
       let rec = (hash, key) => {
         const newHash = hash[key];
         const newKey = Object.keys(newHash)[0];
-        return newKey ? rec(newHash, +newKey) : key;
+        return newKey ? rec(newHash, newKey) : key;
       };
-      const id = rec(hash, +Object.keys(hash)[0]);
-      const item = all.find((item) => get(item, optionValuePath) === id);
+      const id = rec(hash, Object.keys(hash)[0]);
+      const item = all.find((item) => get(item, optionValuePath) == id);
 
       addSelection(item);
     },
@@ -95,10 +96,10 @@ export default Component.extend({
       const optionChildrenPath = this.get('optionChildrenPath');
       const optionValuePath = this.get('optionValuePath');
       const id = array.pop();
-      const item = all.find((item) => get(item, optionValuePath) === id);
+      const item = all.find((item) => get(item, optionValuePath) == id);
 
       const parentId = array.pop();
-      const parent = all.find((item) => get(item, optionValuePath) === parentId);
+      const parent = all.find((item) => get(item, optionValuePath) == parentId);
       if (parent) {
 
         const siblings = A(get(parent, optionChildrenPath)).filter((child) => {

@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/resolve-content';
 const { A, Component, run: { schedule }, RSVP: { Promise } } = Ember;
+// const esPromise = window.Promise;
 
 export default Component.extend({
   tagName: '',
@@ -32,8 +33,12 @@ export default Component.extend({
         }
         const sanitizedContent = this.get('sanitizedContent');
         const isPlainArray = typeof content.length === 'number';
-        const isPlainPromiseArray = content[0] && content[0].constructor === Promise;
-        const isPromise = content.constructor === Promise;
+        const isArrayWithEmberPromises = content[0] && content[0].constructor === Promise;
+        const isEmberPromise = content.constructor.toString() === Promise.toString();
+        // const isES6Promise = content.constructor.toString() === esPromise.toString();
+        const isLoadedDefined = typeof content.isLoaded !== 'undefined';
+        const isArrayProxy = content.constructor.toString() === 'Ember.ArrayProxy';
+        const isDSPromiseArray = content.constructor.toString() === 'DS.PromiseArray';
 
         const pushItems = (content) => {
           const isPromise = content.get('firstObject.constructor') === Promise;
@@ -44,29 +49,44 @@ export default Component.extend({
           }
         };
 
-        if (isPlainArray && !isPlainPromiseArray){
+        if (isPlainArray && !isArrayWithEmberPromises && !isDSPromiseArray){
           sanitizedContent.addObjects(content);
           resolve();
         }
 
-        if (isPlainArray && isPlainPromiseArray){
-          Promise.all(content).then((rc) => sanitizedContent.addObjects(rc));
-          resolve();
+        if (isPlainArray && isArrayWithEmberPromises && !isDSPromiseArray){
+          Promise.all(content).then(rc => {
+            sanitizedContent.addObjects(rc);
+            resolve();
+          });
         }
 
-        if (isPromise){
+        if(isDSPromiseArray){
+          content.then(rc => {
+            sanitizedContent.addObjects(rc);
+            resolve();
+          });
+        }
+
+        if (isEmberPromise){
           content.then((x) => { sanitizedContent.addObjects(x); });
           resolve();
         }
 
-        if (!isPromise && content.isLoaded) {
+        if (!isEmberPromise && isLoadedDefined && content.isLoaded){
           pushItems(content);
           resolve();
         }
 
-        if (!isPromise && !content.isLoaded) {
-          //content.then(pushItems);  TODO: investigate which line + add TESTS
-          pushItems(content);     //  TODO: investigate which line
+        // check for subclasses of ArrayProxy stil untested
+        // we now check for DSPromiseArray, so we could remove comment..
+        if (!isEmberPromise && isLoadedDefined && !content.isLoaded){
+          content.then(pushItems);
+          resolve();
+        }
+
+        if(isArrayProxy){
+          pushItems(content);
           resolve();
         }
       });
