@@ -24,7 +24,7 @@
       {{else}}
         <label {{action 'removeFromSelection' s.item}}> X </label>
         <label class='collapsed'> {{get s.item optionLabelPath}} </label>
-        {{generic-field
+        {{recursive-input
           content=s.content
           tree=s.tree
           parent=s.item

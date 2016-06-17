@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/generic-field';
+import layout from '../templates/components/recursive-input';
 const { A, Component, computed, set, get } = Ember;
 
 let oldQueryString;
