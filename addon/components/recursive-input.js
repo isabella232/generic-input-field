@@ -16,12 +16,14 @@ export default Component.extend({
     const optionLabelPath = this.get('optionLabelPath');
     let selectedIds = this.get('selections').map((s) => {
       if (s.collapsed) {
-        const buildSelection = (array, hash) => {
+        const buildSelectionRecursively = (array, hash) => {
           const keys = Object.keys(hash);
           if (keys.length === 0) { return []; }
-          return array.concat(keys).concat(...keys.map(key => buildSelection([], hash[key])));
+          return array.concat(keys).concat(...keys.map(key => {
+            return buildSelectionRecursively([], hash[key]);
+          }));
         };
-        return buildSelection([], s.tree);
+        return buildSelectionRecursively([], s.tree);
       } else {
         return get(s.item, optionValuePath);
       }
