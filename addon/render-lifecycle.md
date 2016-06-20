@@ -41,5 +41,15 @@ Scope: GLOBAL & LOCAL -> as it will only ever be defined on the component top le
 
 ### Collapse Limit
 To indicate how many children should be collapsed when the expand option is false.
-Scope: UNSURE(LOCAL?) -> implement both for now, (implemented global first,)
+Scope: GLOBAL & LOCAL -> implemented both for now
 Lifecycle, only applies on initial render, after the user has started selection again, ignore option.
+
+### Current Issues/Todos
+
+Issues
+
+[ ] With the new collapse logic, auto collapse happens after the first item is delete.
+
+Todos
+
+[ ] Consider moving some part of component into a "top level" for easier testing
