@@ -1,3 +1,5 @@
+/*jshint eqeqeq: false */
+
 import Ember from 'ember';
 import assign from '../utils/deep-assign';
 import layout from '../templates/components/generic-input-field';
@@ -6,17 +8,31 @@ const { A, Component, computed, get } = Ember;
 export default Component.extend({
   layout,
   tagName: '',
-  optionLimitPath: 'limit',
+
+  // the below props are passed to recur-input
+  // and not used in generic-input at all
+  // so they just act as defaults
+  optionSelectionLimitPath: 'selectionLimit',
+  selectionLimit: 0,
+
+  optionCollapseLimitPath: 'collapseLimit',
+  collapseLimit: 0,
+
+  optionExpandPath: 'expand',
+
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
-  limit: 0,
+
 
   myTree: computed('input.[]', function() {
     const items = this.get('input');
     const all = this.get('all');
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
+    const optionExpandPath = this.get('optionExpandPath');
+    const collapseLimitPath = this.get('optionCollapseLimitPath');
+    let collapseLimit = this.get(collapseLimitPath);
     const findParent = (item) => all.find((parent) => {
       const children = get(parent, optionChildrenPath);
       if(typeof children === 'undefined'){
@@ -26,7 +42,7 @@ export default Component.extend({
       }
     });
 
-    const rec = (hash, parent) => {
+    const growTreeRecursively = (hash, parent) => {
       const nextParent = findParent(parent);
 
       if (!parent) {
@@ -34,40 +50,49 @@ export default Component.extend({
       }
 
       if (nextParent) {
-        return rec({ [get(parent, optionValuePath)]: hash }, nextParent);
+        return growTreeRecursively({ [get(parent, optionValuePath)]: hash }, nextParent);
       } else {
         return { [get(parent, optionValuePath)]: hash };
       }
 
     };
 
-    const paths = items.map(item => rec({ [get(item, optionValuePath)]: {} }, findParent(item)));
+    const paths = items.map(item => growTreeRecursively({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
     const tree = assign({}, ...paths);
 
-    const rec2 = (hash) => {
+    const trimTreeRecursively = (hash, parentKey) => {
       const keys = Object.keys(hash);
 
       const expandedKeys = keys.filter((key) => {
         const item = all.findBy(optionValuePath, key);
-        return get(item, 'expand');
+        return get(item, optionExpandPath);
       });
-      const collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), 'expand'));
+      let collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), optionExpandPath));
 
-      expandedKeys.forEach((key) => rec2(hash[key]));
+      let pastLimitKeys = [];
+      if (parentKey) {
+        const branch = all.findBy(optionValuePath, parentKey);
+        const parentCollapseLimit = get(branch, collapseLimitPath);
+        if (parentCollapseLimit !== undefined) {
+          collapseLimit = parentCollapseLimit;
+        }
+      }
 
-      if (collapsedKeys.length >= 3) {
+      expandedKeys.forEach((key) => trimTreeRecursively(hash[key], key));
+
+      if (collapsedKeys.length > collapseLimit && collapseLimit !== 0) {
         hash.collapsed = {};
         collapsedKeys.forEach((key) => {
           hash.collapsed[key] = hash[key];
           delete hash[key];
         });
       } else {
-        collapsedKeys.forEach((key) => rec2(hash[key]));
+        collapsedKeys.forEach((key) => trimTreeRecursively(hash[key], key));
       }
     };
 
-    rec2(tree);
+    trimTreeRecursively(tree);
     return tree;
   }),
 
@@ -77,12 +102,12 @@ export default Component.extend({
       const all = this.get('all');
       const addSelection = this.get('addSelection');
       const optionValuePath = this.get('optionValuePath');
-      let rec = (hash, key) => {
+      let extractKeyRecursively = (hash, key) => {
         const newHash = hash[key];
         const newKey = Object.keys(newHash)[0];
-        return newKey ? rec(newHash, newKey) : key;
+        return newKey ? extractKeyRecursively(newHash, newKey) : key;
       };
-      const id = rec(hash, Object.keys(hash)[0]);
+      const id = extractKeyRecursively(hash, Object.keys(hash)[0]);
       const item = all.find((item) => get(item, optionValuePath) == id);
 
       addSelection(item);

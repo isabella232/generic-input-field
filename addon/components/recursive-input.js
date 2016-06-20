@@ -7,34 +7,31 @@ let oldQueryString;
 export default Component.extend({
   layout,
   tagName: '',
-  optionChildrenPath: 'children',
-  optionLabelPath: 'label',
-  optionValuePath: 'id',
-  limit: 0,
 
   filteredContent: computed('selections', 'content.length', 'queryString', function() {
     const queryString = this.get('queryString');
     const content = this.get('content');
-    const limit = this.get('limit');
+    const selectionLimit = this.get('selectionLimit');
     const optionValuePath = this.get('optionValuePath');
     const optionLabelPath = this.get('optionLabelPath');
     let selectedIds = this.get('selections').map((s) => {
       if (s.collapsed) {
-        const rec = (array, hash) => {
+        const buildSelectionRecursively = (array, hash) => {
           const keys = Object.keys(hash);
           if (keys.length === 0) { return []; }
-          return array.concat(keys).concat(...keys.map(key => rec([], hash[key])));
+          return array.concat(keys).concat(...keys.map(key => {
+            return buildSelectionRecursively([], hash[key]);
+          }));
         };
-        return rec([], s.tree);
+        return buildSelectionRecursively([], s.tree);
       } else {
-        const id = get(s.item, optionValuePath);
-        return id;
+        return get(s.item, optionValuePath);
       }
     });
 
     selectedIds = [].concat.apply([], selectedIds);
 
-    if (limit && selectedIds.length >= limit) {
+    if (selectionLimit && selectedIds.length >= selectionLimit) {
       return [];
     }
 
@@ -53,7 +50,8 @@ export default Component.extend({
     const content = this.get('content');
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
-    const optionLimitPath = this.get('optionLimitPath');
+    const optionSelectionLimitPath = this.get('optionSelectionLimitPath');
+    const optionCollapseLimitPath = this.get('optionCollapseLimitPath');
     let selections = Object.keys(tree);
     selections = selections.map((id) => content.findBy(optionValuePath, id));
     selections = selections.map((item) => {
@@ -61,7 +59,8 @@ export default Component.extend({
       if (item) {
         return Ember.Object.create({
           item,
-          limit: get(item, optionLimitPath),
+          selectionLimit: get(item, optionSelectionLimitPath),
+          collapseLimit: get(item, optionCollapseLimitPath),
           content: A(get(item, optionChildrenPath)),
           tree: tree[get(item, optionValuePath)]
         });
@@ -90,7 +89,7 @@ export default Component.extend({
       this.get('loadMore')(parent);
     },
     addToSelection(item) {
-      set(item, 'expand', true);
+      set(item, this.get('optionExpandPath'), true);
       const optionValuePath = this.get('optionValuePath');
       this.get('addSelection')({ [get(item, optionValuePath)]: {} }, this.get(`parent.${optionValuePath}`));
     },
@@ -100,16 +99,15 @@ export default Component.extend({
     },
     removeTreeFromSelection(tree) {
       const parentId = this.get('parent.id');
-      const rec = (array, hash) => {
+      const buildSelection = (array, hash) => {
         const keys = Object.keys(hash);
         if (keys.length === 0) {
           return [];
         }
-
-        return array.concat(keys).concat(...keys.map(key => rec([], hash[key])));
+        return array.concat(keys).concat(...keys.map(key => buildSelection([], hash[key])));
       };
 
-      const ids = rec([], tree);
+      const ids = buildSelection([], tree);
       ids.forEach((id) => this.get('removeSelection')([id], parentId));
     },
     removeFromSelection(item) {
