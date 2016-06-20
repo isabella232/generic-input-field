@@ -40,7 +40,7 @@ To indicate to the component that only a certain number of options will be selec
 Scope: GLOBAL & LOCAL -> as it will only ever be defined on the component top level api.
 
 ### Collapse Limit
-To indicate how many children should be collapsed when the expand option is false.
+To indicate that children should be collapsed, once exceeding a set limit.
 Scope: GLOBAL & LOCAL -> implemented both for now
 Lifecycle, only applies on initial render, after the user has started selection again, ignore option.
 
