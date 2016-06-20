@@ -30,7 +30,7 @@ export default Component.extend({
     const optionValuePath = this.get('optionValuePath');
     const optionExpandPath = this.get('optionExpandPath');
     const collapseLimitPath = this.get('optionCollapseLimitPath');
-    const collapseLimit = this.get(collapseLimitPath);
+    let collapseLimit = this.get(collapseLimitPath);
     const findParent = (item) => all.find((parent) => {
       const children = get(parent, optionChildrenPath);
       if(typeof children === 'undefined'){
@@ -57,9 +57,9 @@ export default Component.extend({
 
     const paths = items.map(item => rec({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
-    const tree = assign({}, ...paths);
+    let tree = assign({}, ...paths);
 
-    const rec2 = (hash) => {
+    const rec2 = (hash, parentKey) => {
       const keys = Object.keys(hash);
 
       const expandedKeys = keys.filter((key) => {
@@ -68,6 +68,13 @@ export default Component.extend({
       });
       let collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), optionExpandPath));
       let pastLimitKeys = [];
+      if(parentKey){
+        const branch = all.findBy(optionValuePath, parentKey);
+        const parentCollapseLimit = get(branch, collapseLimitPath);
+        if(parentCollapseLimit){
+          collapseLimit = parentCollapseLimit;
+        }
+      }
 
       // console.log('collapseLimit:',collapseLimit);
       // console.log('expandedKeys:',expandedKeys);
@@ -86,7 +93,7 @@ export default Component.extend({
       // console.log('expandedKeys:',expandedKeys);
       // console.log('expandedKeys.length:',expandedKeys.length);
 
-      expandedKeys.forEach((key) => rec2(hash[key]));
+      expandedKeys.forEach((key) => rec2(hash[key], key));
 
       if (collapsedKeys.length > 0) {
         hash.collapsed = {};
@@ -95,7 +102,7 @@ export default Component.extend({
           delete hash[key];
         });
       } else {
-        collapsedKeys.forEach((key) => rec2(hash[key]));
+        collapsedKeys.forEach((key) => rec2(hash[key], key));
       }
     };
 
