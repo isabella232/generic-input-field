@@ -59,7 +59,7 @@ export default Component.extend({
 
     const paths = items.map(item => growTreeRecursively({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
-    let tree = assign({}, ...paths);
+    const tree = assign({}, ...paths);
 
     const trimTreeRecursively = (hash, parentKey) => {
       const keys = Object.keys(hash);
@@ -69,35 +69,19 @@ export default Component.extend({
         return get(item, optionExpandPath);
       });
       let collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), optionExpandPath));
+
       let pastLimitKeys = [];
-      if(parentKey){
+      if (parentKey) {
         const branch = all.findBy(optionValuePath, parentKey);
         const parentCollapseLimit = get(branch, collapseLimitPath);
-        if(parentCollapseLimit){
+        if (parentCollapseLimit !== undefined) {
           collapseLimit = parentCollapseLimit;
         }
       }
 
-      // console.log('collapseLimit:',collapseLimit);
-      // console.log('expandedKeys:',expandedKeys);
-      // console.log('expandedKeys.length:',expandedKeys.length);
-      // console.log('collapsedKeys:',collapsedKeys);
-      // console.log('collapsedKeys.length:',collapsedKeys.length);
-
-      if (collapseLimit !== 0 && collapsedKeys.length >= collapseLimit) {
-        pastLimitKeys = collapsedKeys.slice(collapseLimit, collapsedKeys.length);
-        collapsedKeys = collapsedKeys.slice(0, collapseLimit);
-      }
-      expandedKeys.concat(pastLimitKeys);
-
-      // console.log('pastLimitKeys:', pastLimitKeys);
-      // console.log('collapsedKeys:', collapsedKeys);
-      // console.log('expandedKeys:',expandedKeys);
-      // console.log('expandedKeys.length:',expandedKeys.length);
-
       expandedKeys.forEach((key) => trimTreeRecursively(hash[key], key));
 
-      if (collapsedKeys.length > 0) {
+      if (collapsedKeys.length > collapseLimit && collapseLimit !== 0) {
         hash.collapsed = {};
         collapsedKeys.forEach((key) => {
           hash.collapsed[key] = hash[key];
