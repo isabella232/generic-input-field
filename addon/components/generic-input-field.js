@@ -1,3 +1,5 @@
+/*jshint eqeqeq: false */
+
 import Ember from 'ember';
 import assign from '../utils/deep-assign';
 import layout from '../templates/components/generic-input-field';

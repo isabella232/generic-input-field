@@ -1,9 +1,11 @@
+/*jshint unused: false */
+
 import Ember from 'ember';
-const { A, $ } = Ember;
+const { A } = Ember;
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('root-component', 'Integration | Component | root component', {
+moduleForComponent('generic-input-field', 'Integration | Component | generic-input-field', {
   integration: true
 });
 
@@ -17,7 +19,7 @@ test('it renders with no selections', function(assert) {
 
   this.set('input', A([]));
 
-  this.render(hbs`{{root-component all=all input=input}}`);
+  this.render(hbs`{{generic-input-field all=all input=input}}`);
 
   const genericFields = this.$('div.generic-field');
   const parentLevel = genericFields[0];
@@ -41,7 +43,7 @@ test('it renders with one selection', function(assert) {
     { id: '1', label: 'A' },
   ]));
 
-  this.render(hbs`{{root-component all=all input=input}}`);
+  this.render(hbs`{{generic-input-field all=all input=input}}`);
 
   const genericFields = this.$('div.generic-field');
   const parentLevel = $(genericFields[0]);

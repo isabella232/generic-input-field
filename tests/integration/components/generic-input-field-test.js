@@ -13,6 +13,9 @@ test('content is set successfully', function(assert) {
     { id: 'cc', label: 'SCategory C' },
   ];
   this.set('myContent', content);
+
+  this.render(hbs`<span>be silent jshint</span>`);
+
   assert.equal(this.get('myContent.length'), content.length, 'content set and retrieved successfully');
 });
 

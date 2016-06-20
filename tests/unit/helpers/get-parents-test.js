@@ -1,10 +1,14 @@
+import Ember from 'ember';
+
+const { A } = Ember;
+
 import { getParents } from 'dummy/helpers/get-parents';
 import { module, test } from 'qunit';
 
 module('Unit | Helper | get parents');
 
-// Replace this with your real tests.
-test('it works', function(assert) {
-  let result = getParents([42]);
+test('gets parents correctly', function(assert) {
+  const emptyArray = A([]);
+  const result = getParents([emptyArray]);
   assert.ok(result);
 });
