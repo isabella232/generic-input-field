@@ -10,9 +10,11 @@ export default Component.extend({
   content: null, // <- mandatory and array
 
   init() {
+    // console.log('resolve-content onInit_before:', this.get('content'), this.get('test'));
     this.set('sanitizedContent', A());
     this.sanitize();
     this._super();
+    // console.log('resolve-content onInit_after:', this.get('content'), this.get('test'));
   },
 
   contentChanged: Ember.observer('content.[]', function() {
@@ -26,6 +28,8 @@ export default Component.extend({
   sanitize() {
     return new Promise((resolve) => {
       schedule('afterRender', this, () => {
+
+        // console.log('resolve-content afterRender:', this.get('content'), this.get('test'));
 
         const content = this.get('content');
         if (!content) {

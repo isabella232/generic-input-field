@@ -10,12 +10,11 @@ export default Component.extend({
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
-  limit: 0,
 
   filteredContent: computed('selections', 'content.length', 'queryString', function() {
     const queryString = this.get('queryString');
     const content = this.get('content');
-    const limit = this.get('limit');
+    const selectionLimit = this.get('selectionLimit');
     const optionValuePath = this.get('optionValuePath');
     const optionLabelPath = this.get('optionLabelPath');
     let selectedIds = this.get('selections').map((s) => {
@@ -34,7 +33,7 @@ export default Component.extend({
 
     selectedIds = [].concat.apply([], selectedIds);
 
-    if (limit && selectedIds.length >= limit) {
+    if (selectionLimit && selectedIds.length >= selectionLimit) {
       return [];
     }
 
@@ -53,7 +52,7 @@ export default Component.extend({
     const content = this.get('content');
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
-    const optionLimitPath = this.get('optionLimitPath');
+    const optionSelectionLimitPath = this.get('optionSelectionLimitPath');
     let selections = Object.keys(tree);
     selections = selections.map((id) => content.findBy(optionValuePath, id));
     selections = selections.map((item) => {
@@ -61,7 +60,7 @@ export default Component.extend({
       if (item) {
         return Ember.Object.create({
           item,
-          limit: get(item, optionLimitPath),
+          selectionLimit: get(item, optionSelectionLimitPath),
           content: A(get(item, optionChildrenPath)),
           tree: tree[get(item, optionValuePath)]
         });

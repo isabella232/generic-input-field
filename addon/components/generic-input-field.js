@@ -6,11 +6,17 @@ const { A, Component, computed, get } = Ember;
 export default Component.extend({
   layout,
   tagName: '',
-  optionLimitPath: 'limit',
+
+  // the below props are passed to recur-input
+  // and not used in generic-input at all
+  // so they just act as defaults
+  optionSelectionLimitPath: 'selectionLimit',
+  selectionLimit: 0,
+
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
-  limit: 0,
+
 
   myTree: computed('input.[]', function() {
     const items = this.get('input');
