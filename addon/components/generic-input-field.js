@@ -13,6 +13,11 @@ export default Component.extend({
   optionSelectionLimitPath: 'selectionLimit',
   selectionLimit: 0,
 
+  optionCollapseLimitPath: 'collapseLimit',
+  collapseLimit: 0,
+
+  optionExpandPath: 'expand',
+
   optionChildrenPath: 'children',
   optionLabelPath: 'label',
   optionValuePath: 'id',
@@ -23,6 +28,9 @@ export default Component.extend({
     const all = this.get('all');
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
+    const optionExpandPath = this.get('optionExpandPath');
+    const collapseLimitPath = this.get('optionCollapseLimitPath');
+    const collapseLimit = this.get(collapseLimitPath);
     const findParent = (item) => all.find((parent) => {
       const children = get(parent, optionChildrenPath);
       if(typeof children === 'undefined'){
@@ -56,13 +64,31 @@ export default Component.extend({
 
       const expandedKeys = keys.filter((key) => {
         const item = all.findBy(optionValuePath, key);
-        return get(item, 'expand');
+        return get(item, optionExpandPath);
       });
-      const collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), 'expand'));
+      let collapsedKeys = keys.filter((key) => !get(all.findBy(optionValuePath, key), optionExpandPath));
+      let pastLimitKeys = [];
+
+      // console.log('collapseLimit:',collapseLimit);
+      // console.log('expandedKeys:',expandedKeys);
+      // console.log('expandedKeys.length:',expandedKeys.length);
+      // console.log('collapsedKeys:',collapsedKeys);
+      // console.log('collapsedKeys.length:',collapsedKeys.length);
+
+      if (collapseLimit !== 0 && collapsedKeys.length >= collapseLimit) {
+        pastLimitKeys = collapsedKeys.slice(collapseLimit, collapsedKeys.length);
+        collapsedKeys = collapsedKeys.slice(0, collapseLimit);
+      }
+      expandedKeys.concat(pastLimitKeys);
+
+      // console.log('pastLimitKeys:', pastLimitKeys);
+      // console.log('collapsedKeys:', collapsedKeys);
+      // console.log('expandedKeys:',expandedKeys);
+      // console.log('expandedKeys.length:',expandedKeys.length);
 
       expandedKeys.forEach((key) => rec2(hash[key]));
 
-      if (collapsedKeys.length >= 3) {
+      if (collapsedKeys.length > 0) {
         hash.collapsed = {};
         collapsedKeys.forEach((key) => {
           hash.collapsed[key] = hash[key];

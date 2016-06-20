@@ -41,4 +41,5 @@ Scope: GLOBAL & LOCAL -> as it will only ever be defined on the component top le
 
 ### Collapse Limit
 To indicate how many children should be collapsed when the expand option is false.
-Scope: UNSURE(LOCAL?) -> implemented both for now.
+Scope: UNSURE(LOCAL?) -> implement both for now, (implemented global first,)
+Lifecycle, only applies on initial render, after the user has started selection again, ignore option.

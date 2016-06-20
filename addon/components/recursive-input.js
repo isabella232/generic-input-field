@@ -7,9 +7,6 @@ let oldQueryString;
 export default Component.extend({
   layout,
   tagName: '',
-  optionChildrenPath: 'children',
-  optionLabelPath: 'label',
-  optionValuePath: 'id',
 
   filteredContent: computed('selections', 'content.length', 'queryString', function() {
     const queryString = this.get('queryString');
@@ -53,6 +50,7 @@ export default Component.extend({
     const optionChildrenPath = this.get('optionChildrenPath');
     const optionValuePath = this.get('optionValuePath');
     const optionSelectionLimitPath = this.get('optionSelectionLimitPath');
+    const optionCollapseLimitPath = this.get('optionCollapseLimitPath');
     let selections = Object.keys(tree);
     selections = selections.map((id) => content.findBy(optionValuePath, id));
     selections = selections.map((item) => {
@@ -61,6 +59,7 @@ export default Component.extend({
         return Ember.Object.create({
           item,
           selectionLimit: get(item, optionSelectionLimitPath),
+          collapseLimit: get(item, optionCollapseLimitPath),
           content: A(get(item, optionChildrenPath)),
           tree: tree[get(item, optionValuePath)]
         });
@@ -89,7 +88,7 @@ export default Component.extend({
       this.get('loadMore')(parent);
     },
     addToSelection(item) {
-      set(item, 'expand', true);
+      set(item, this.get('optionExpandPath'), true);
       const optionValuePath = this.get('optionValuePath');
       this.get('addSelection')({ [get(item, optionValuePath)]: {} }, this.get(`parent.${optionValuePath}`));
     },
