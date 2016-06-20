@@ -40,7 +40,7 @@ export default Component.extend({
       }
     });
 
-    const rec = (hash, parent) => {
+    const growTreeRecursively = (hash, parent) => {
       const nextParent = findParent(parent);
 
       if (!parent) {
@@ -48,18 +48,18 @@ export default Component.extend({
       }
 
       if (nextParent) {
-        return rec({ [get(parent, optionValuePath)]: hash }, nextParent);
+        return growTreeRecursively({ [get(parent, optionValuePath)]: hash }, nextParent);
       } else {
         return { [get(parent, optionValuePath)]: hash };
       }
 
     };
 
-    const paths = items.map(item => rec({ [get(item, optionValuePath)]: {} }, findParent(item)));
+    const paths = items.map(item => growTreeRecursively({ [get(item, optionValuePath)]: {} }, findParent(item)));
 
     let tree = assign({}, ...paths);
 
-    const rec2 = (hash, parentKey) => {
+    const trimTreeRecursively = (hash, parentKey) => {
       const keys = Object.keys(hash);
 
       const expandedKeys = keys.filter((key) => {
@@ -93,7 +93,7 @@ export default Component.extend({
       // console.log('expandedKeys:',expandedKeys);
       // console.log('expandedKeys.length:',expandedKeys.length);
 
-      expandedKeys.forEach((key) => rec2(hash[key], key));
+      expandedKeys.forEach((key) => trimTreeRecursively(hash[key], key));
 
       if (collapsedKeys.length > 0) {
         hash.collapsed = {};
@@ -102,11 +102,11 @@ export default Component.extend({
           delete hash[key];
         });
       } else {
-        collapsedKeys.forEach((key) => rec2(hash[key], key));
+        collapsedKeys.forEach((key) => trimTreeRecursively(hash[key], key));
       }
     };
 
-    rec2(tree);
+    trimTreeRecursively(tree);
     return tree;
   }),
 
@@ -116,12 +116,12 @@ export default Component.extend({
       const all = this.get('all');
       const addSelection = this.get('addSelection');
       const optionValuePath = this.get('optionValuePath');
-      let rec = (hash, key) => {
+      let extractKeyRecursively = (hash, key) => {
         const newHash = hash[key];
         const newKey = Object.keys(newHash)[0];
-        return newKey ? rec(newHash, newKey) : key;
+        return newKey ? extractKeyRecursively(newHash, newKey) : key;
       };
-      const id = rec(hash, Object.keys(hash)[0]);
+      const id = extractKeyRecursively(hash, Object.keys(hash)[0]);
       const item = all.find((item) => get(item, optionValuePath) == id);
 
       addSelection(item);

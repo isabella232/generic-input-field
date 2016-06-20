@@ -16,15 +16,14 @@ export default Component.extend({
     const optionLabelPath = this.get('optionLabelPath');
     let selectedIds = this.get('selections').map((s) => {
       if (s.collapsed) {
-        const rec = (array, hash) => {
+        const buildSelection = (array, hash) => {
           const keys = Object.keys(hash);
           if (keys.length === 0) { return []; }
-          return array.concat(keys).concat(...keys.map(key => rec([], hash[key])));
+          return array.concat(keys).concat(...keys.map(key => buildSelection([], hash[key])));
         };
-        return rec([], s.tree);
+        return buildSelection([], s.tree);
       } else {
-        const id = get(s.item, optionValuePath);
-        return id;
+        return get(s.item, optionValuePath);
       }
     });
 
@@ -98,16 +97,15 @@ export default Component.extend({
     },
     removeTreeFromSelection(tree) {
       const parentId = this.get('parent.id');
-      const rec = (array, hash) => {
+      const buildSelection = (array, hash) => {
         const keys = Object.keys(hash);
         if (keys.length === 0) {
           return [];
         }
-
-        return array.concat(keys).concat(...keys.map(key => rec([], hash[key])));
+        return array.concat(keys).concat(...keys.map(key => buildSelection([], hash[key])));
       };
 
-      const ids = rec([], tree);
+      const ids = buildSelection([], tree);
       ids.forEach((id) => this.get('removeSelection')([id], parentId));
     },
     removeFromSelection(item) {
