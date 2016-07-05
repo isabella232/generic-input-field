@@ -44,8 +44,6 @@
     "ember-addon"
   ],
   "dependencies": {
-    "deep-assign": "2.0.0",
-    "ember-browserify": "1.1.9",
     "ember-cli-babel": "^5.1.6",
     "ember-cli-htmlbars": "^1.0.3"
   },
