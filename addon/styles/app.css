@@ -1,29 +1,29 @@
-html, body {
-  background: ghostwhite;
-}
-
 .generic-field.last {
   opacity: 0;
 }
+
 .generic-field {
   background: rgba(1,1,1,0.1);
   display: inline-block;
   border: 1px solid rgba(1,1,1,0.2);
   box-sizing: border-box;
   position: relative;
+  color: #505050;
   margin: 2px;
 }
 
-label {
+.generic-field label {
   vertical-align: top;
   cursor: pointer;
 }
-label.collapsed {
+
+.generic-field label.collapsed {
   white-space: nowrap;
   display: block;
   width: auto !important;
   cursor: default !important;
 }
+
 .generic-field .content { top: 40px; z-index: 2; right: 0; }
 .generic-field input { font-size: 30px; border-radius: 6px; }
 .generic-field .selection { font-size: 25px; }
@@ -64,7 +64,7 @@ label.collapsed {
   min-height: 10px; line-height: 10px; border-radius: 2px;
 }
 
-input {
+.generic-field input {
   height: 100%;
   border: none;
   box-sizing: border-box;
@@ -72,18 +72,36 @@ input {
   border-radius: 5px;
 }
 
-.content {
+.generic-field .content {
   display: none;
   position: absolute;
   top: 160px;
   left: 0;
-  background: rgba(255, 165, 0, 1);
+  background: rgb(230, 230, 230);
+  color: #505050;
+  border: 1px solid rgba(1,1,1,0.2);
+  border-top: none;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
-.content.active {
+.generic-field .generic-field .content label {
+  display: block;
+  border-bottom: 1px solid rgba(1,1,1,0.2);
+  white-space: nowrap;
+  padding: .2em;
+  overflow: hidden;
+}
+
+.generic-field .generic-field .content label:hover {
+  background: gray;
+  color: white;
+}
+
+.generic-field .content.active {
   display: block;
 }
 
-.selection {
+.generic-field .selection {
   display: inline;
 }
