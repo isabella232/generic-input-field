@@ -16,6 +16,10 @@
   vertical-align: top;
   cursor: pointer;
 }
+.generic-field .fa.fa-times {
+  font-size: .9em;
+  padding-left: 0.5em;
+}
 
 .generic-field label.collapsed {
   white-space: nowrap;

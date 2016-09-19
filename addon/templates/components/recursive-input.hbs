@@ -19,10 +19,10 @@
   {{#each selections as |s|}}
     <div class='generic-field'>
       {{#if s.collapsed}}
-        <label class='collapsed' {{action 'removeTreeFromSelection' s.tree}}> X </label>
+        <label class='collapsed' {{action 'removeTreeFromSelection' s.tree}}>{{fa-icon "times"}}</label>
         <label class='collapsed'> {{s.count}} collapsed items </label>
       {{else}}
-        <label class='collapsed' {{action 'removeFromSelection' s.item}}> X </label>
+        <label class='collapsed' {{action 'removeFromSelection' s.item}}>{{fa-icon "times"}}</label>
         <label class='collapsed'> {{get s.item optionLabelPath}} </label>
         {{recursive-input
           content=s.content
