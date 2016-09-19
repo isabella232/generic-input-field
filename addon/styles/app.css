@@ -75,7 +75,7 @@
 .generic-field .content {
   display: none;
   position: absolute;
-  top: 160px;
+  top: 38px;
   left: 0;
   background: rgb(230, 230, 230);
   color: #505050;
@@ -85,7 +85,7 @@
   overflow-y: scroll;
 }
 
-.generic-field .generic-field .content label {
+.generic-field .content label {
   display: block;
   border-bottom: 1px solid rgba(1,1,1,0.2);
   white-space: nowrap;
