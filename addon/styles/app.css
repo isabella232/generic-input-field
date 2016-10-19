@@ -2,6 +2,10 @@
   opacity: 0;
 }
 
+.generic-field.first {
+  background: transparent;
+}
+
 .generic-field {
   background: rgba(1,1,1,0.1);
   display: inline-block;
