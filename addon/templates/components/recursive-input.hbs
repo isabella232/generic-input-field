@@ -1,29 +1,11 @@
-{{input value=queryString
-  autoresize=true
-  key-up=(action 'searchMore' parent)
-  focus-out=(action 'setActive' 'input' false)
-  focus-in=(action 'setActive' 'input' true)}}
-
-<div class='content {{if contentIsActive 'active'}} {{if inputIsActive 'active'}}'
-  {{action 'setActive' 'content' true on='mouseEnter'}}
-  {{action 'setActive' 'content' false on='mouseLeave'}}>
-  {{#each filteredContent as |item|}}
-    <label class='collapsed' {{action 'addToSelection' item}}>
-      {{get item optionLabelPath}}
-    </label>
-  {{else}}
-    <label>[]</label>
-  {{/each}}
-  <button {{action 'loadMore' parent}}>more..</button>
-</div>
 <div class='selection'>
   {{#each selections as |s|}}
-    <div class='generic-field'>
+    <div class='generic-field {{get s.item optionValuePath}}' {{action 'selectGenericField' s.item bubbles=false}}>
       {{#if s.collapsed}}
-        <label class='collapsed' {{action 'removeTreeFromSelection' s.tree}}>{{fa-icon "times"}}</label>
+        <label class='collapsed' {{action 'removeTreeFromSelection' s.tree bubbles=false}}>{{fa-icon "times"}}</label>
         <label class='collapsed'> {{s.count}} collapsed items </label>
       {{else}}
-        <label class='collapsed' {{action 'removeFromSelection' s.item}}>{{fa-icon "times"}}</label>
+        <label class='collapsed' {{action 'removeFromSelection' s.item bubbles=false}}>{{fa-icon "times"}}</label>
         <label class='collapsed'> {{get s.item optionLabelPath}} </label>
         {{recursive-input
           content=s.content
@@ -47,4 +29,23 @@
     <div class='generic-field last'><div class='selection'></div></div>
     <!--label>[]</label-->
   {{/each}}
+</div>
+
+{{input value=queryString
+  autoresize=true
+  key-up=(action 'searchMore' parent)
+  focus-out=(action 'setActive' 'input' false)
+  focus-in=(action 'setActive' 'input' true)}}
+
+<div class='content {{if contentIsActive 'active'}} {{if inputIsActive 'active'}}'
+  {{action 'setActive' 'content' true on='mouseEnter'}}
+  {{action 'setActive' 'content' false on='mouseLeave'}}>
+  {{#each filteredContent as |item|}}
+    <label class='collapsed' {{action 'addToSelection' item bubbles=false}}>
+      {{get item optionLabelPath}}
+    </label>
+  {{else}}
+    <label>[]</label>
+  {{/each}}
+  <button {{action 'loadMore' parent}}>more..</button>
 </div>

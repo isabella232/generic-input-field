@@ -4,6 +4,7 @@
 
 .generic-field.first {
   background: transparent;
+  width: 100%;
 }
 
 .generic-field {
@@ -23,6 +24,13 @@
 .generic-field .fa.fa-times {
   font-size: .9em;
   padding-left: 0.5em;
+  line-height: 1.5em;
+  padding: 0 .4em;
+  cursor: pointer;
+  margin: -1px;
+  vertical-align: top;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .generic-field label.collapsed {
@@ -79,6 +87,11 @@
   vertical-align: top;
   border-radius: 5px;
   width: 10px;
+  opacity: 0;
+}
+
+.generic-field input:focus {
+  opacity: 1;
 }
 
 .generic-field .content {

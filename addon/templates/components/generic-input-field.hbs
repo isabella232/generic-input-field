@@ -1,7 +1,7 @@
 {{#resolve-content content=all as |resolvedAll|}}
 
   {{#if resolvedAll.length}}
-    <div class='generic-field first'>
+    <div class='generic-field first' {{action 'selectFirstGenericField' bubbles=false}}>
       {{recursive-input
         content=(get-parents resolvedAll)
         tree=myTree

@@ -79,6 +79,13 @@ export default Component.extend({
   }),
 
   actions: {
+    selectGenericField(item) {
+      const optionLabelPath = this.get('optionLabelPath');
+      const optionValuePath = this.get('optionValuePath');
+      Ember.$(`.generic-field.${get(item, optionValuePath)} > input`).focus()
+      return;
+    },
+
     searchMore(parent, queryString) {
       if (queryString !== oldQueryString && queryString !== '') {
         oldQueryString = queryString;

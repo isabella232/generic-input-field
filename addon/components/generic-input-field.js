@@ -7,7 +7,8 @@ const { A, Component, computed, get } = Ember;
 
 export default Component.extend({
   layout,
-  tagName: '',
+  tagName: 'div',
+  classNames: ['generic-input-field-container'],
 
   // the below props are passed to recur-input
   // and not used in generic-input at all
@@ -97,6 +98,10 @@ export default Component.extend({
   }),
 
   actions: {
+    selectFirstGenericField(a,b,c) {
+      this.$(`.generic-field.first > input`).focus()
+      return;
+    },
 
     addSelection(hash) {
       const all = this.get('all');
